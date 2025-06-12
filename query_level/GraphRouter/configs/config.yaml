@@ -1,0 +1,30 @@
+# Config parameters for router data construction:
+api_key: ""
+unified_qa_data_path: 'data/unified_qa_data.csv'
+llm_description_path: 'configs/new_LLM_Descriptions_with_think.json'
+# llm_description_path: 'configs/LLM_Descriptions.json'
+llm_embedding_path: 'configs/new_llm_description_embedding_with_think.pkl'
+# llm_embedding_path: 'configs/llm_description_embedding.pkl'
+# saved_router_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_train.csv'
+# saved_router_data_path: 'data/router_data.csv'
+train_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_train_0603_with_judge.csv'
+# test_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_test.csv'
+test_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_test_0603_with_judge.csv'
+query_response_length: 512
+
+
+# Config parameters for graph_router training:
+seed: 1
+wandb_key: ''
+model_path: 'model_path/all_performance_best_model.pth'
+train_epoch: 70
+scenario: "Performance First"  # "Performance First", "Balance", and "Cost First"
+llm_num: 40
+learning_rate: 0.0001
+weight_decay: 0.0001
+train_mask_rate: 0.5
+batch_size: 640
+num_task: 15
+split_ratio: [0.9, 0, 0.1]
+embedding_dim: 8
+edge_dim: 3

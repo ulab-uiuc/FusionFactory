@@ -1,0 +1,242 @@
+{
+  "qwen2-7b-instruct": {
+    "feature": "qwen2-7b-instruct \u2012 Chinese & English LLM for language, coding, mathematics and reasoning; costs $0.20 per M input tokens and $0.20 per M output tokens on Together AI.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "qwen/qwen2-7b-instruct"
+  },
+  "qwen2-7b-instruct_think": {
+    "feature": "qwen2-7b-instruct \u2012 Chinese & English LLM for language, coding, mathematics and reasoning; costs $0.20 per M input tokens and $0.20 per M output tokens on Together AI.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "qwen/qwen2-7b-instruct"
+  },
+  "qwen2.5-7b-instruct": {
+    "feature": "qwen2.5-7b-instruct \u2012 upgraded Qwen with stronger multilingual capability; priced at $0.30 /M input and $0.30 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "qwen/qwen2.5-7b-instruct"
+  },
+  "qwen2.5-7b-instruct_think": {
+    "feature": "qwen2.5-7b-instruct \u2012 upgraded Qwen with stronger multilingual capability; priced at $0.30 /M input and $0.30 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "qwen/qwen2.5-7b-instruct"
+  },
+  "gemma-7b": {
+    "feature": "gemma-7b \u2012 Google\u2019s lightweight 7 B model for text and code; Together cost is $0.20 /M input and $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "google/gemma-7b"
+  },
+  "gemma-7b_think": {
+    "feature": "gemma-7b \u2012 Google\u2019s lightweight 7 B model for text and code; Together cost is $0.20 /M input and $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "google/gemma-7b"
+  },
+  "codegemma-7b": {
+    "feature": "codegemma-7b \u2012 Gemma variant focused on code generation & completion; $0.20 /M input, $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "google/codegemma-7b"
+  },
+  "codegemma-7b_think": {
+    "feature": "codegemma-7b \u2012 Gemma variant focused on code generation & completion; $0.20 /M input, $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "google/codegemma-7b"
+  },
+  "gemma-2-9b-it": {
+    "feature": "gemma-2-9b-it \u2012 2.9 B instruction-tuned Gemma for general text; ultralow $0.10 /M input and $0.10 /M output.",
+    "input_price": 0.1,
+    "output_price": 0.1,
+    "model": "google/gemma-2-9b-it"
+  },
+  "gemma-2-9b-it_think": {
+    "feature": "gemma-2-9b-it \u2012 2.9 B instruction-tuned Gemma for general text; ultralow $0.10 /M input and $0.10 /M output.",
+    "input_price": 0.1,
+    "output_price": 0.1,
+    "model": "google/gemma-2-9b-it"
+  },
+  "llama-3.1-8b-instruct": {
+    "feature": "llama-3.1-8b-instruct \u2012 Meta\u2019s 8 B Llama-3 series for chat & reasoning; $0.20 /M input and $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "llama-3.1-8b-instruct_think": {
+    "feature": "llama-3.1-8b-instruct \u2012 Meta\u2019s 8 B Llama-3 series for chat & reasoning; $0.20 /M input and $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "granite-3.0-8b-instruct": {
+    "feature": "granite-3.0-8b-instruct \u2012 IBM small LLM supporting RAG, summarization & code; $0.20 /M input, $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "ibm/granite-3.0-8b-instruct"
+  },
+  "granite-3.0-8b-instruct_think": {
+    "feature": "granite-3.0-8b-instruct \u2012 IBM small LLM supporting RAG, summarization & code; $0.20 /M input, $0.20 /M output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "ibm/granite-3.0-8b-instruct"
+  },
+  "llama3-chatqa-1.5-8b": {
+    "feature": "llama3-chatqa-1.5-8b \u2012 NVIDIA fine-tuned 8 B for QA & reasoning; $0.20 /M input and output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "nvidia/llama3-chatqa-1.5-8b"
+  },
+  "llama3-chatqa-1.5-8b_think": {
+    "feature": "llama3-chatqa-1.5-8b \u2012 NVIDIA fine-tuned 8 B for QA & reasoning; $0.20 /M input and output.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "nvidia/llama3-chatqa-1.5-8b"
+  },
+  "mistral-nemo-12b-instruct": {
+    "feature": "mistral-nemo-12b-instruct \u2012 12 B model combining Mistral and NeMo tech; $0.30 /M input, $0.30 /M output.",
+    "input_price": 0.3,
+    "output_price": 0.3,
+    "model": "nv-mistralai/mistral-nemo-12b-instruct"
+  },
+  "mistral-nemo-12b-instruct_think": {
+    "feature": "mistral-nemo-12b-instruct \u2012 12 B model combining Mistral and NeMo tech; $0.30 /M input, $0.30 /M output.",
+    "input_price": 0.3,
+    "output_price": 0.3,
+    "model": "nv-mistralai/mistral-nemo-12b-instruct"
+  },
+  "mistral-7b-instruct-v0.3": {
+    "feature": "mistral-7b-instruct-v0.3 \u2012 fast 7 B model for instruction following; $0.20 /M in & out.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "mistralai/mistral-7b-instruct-v0.3"
+  },
+  "mistral-7b-instruct-v0.3_think": {
+    "feature": "mistral-7b-instruct-v0.3 \u2012 fast 7 B model for instruction following; $0.20 /M in & out.",
+    "input_price": 0.2,
+    "output_price": 0.2,
+    "model": "mistralai/mistral-7b-instruct-v0.3"
+  },
+  "llama-3.3-nemotron-super-49b-v1": {
+    "feature": "llama-3.3-nemotron-super-49b-v1 \u2012 49 B Nemotron with high accuracy; $0.90 /M input and output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "llama-3.3-nemotron-super-49b-v1_think": {
+    "feature": "llama-3.3-nemotron-super-49b-v1 \u2012 49 B Nemotron with high accuracy; $0.90 /M input and output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "llama-3.1-nemotron-51b-instruct": {
+    "feature": "llama-3.1-nemotron-51b-instruct \u2012 51 B NVIDIA alignment model; $0.90 /M in & out.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama-3.1-nemotron-51b-instruct"
+  },
+  "llama-3.1-nemotron-51b-instruct_think": {
+    "feature": "llama-3.1-nemotron-51b-instruct \u2012 51 B NVIDIA alignment model; $0.90 /M in & out.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama-3.1-nemotron-51b-instruct"
+  },
+  "llama3-chatqa-1.5-70b": {
+    "feature": "llama3-chatqa-1.5-70b \u2012 70 B chat-optimized Llama; $0.90 /M input and output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama3-chatqa-1.5-70b"
+  },
+  "llama3-chatqa-1.5-70b_think": {
+    "feature": "llama3-chatqa-1.5-70b \u2012 70 B chat-optimized Llama; $0.90 /M input and output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "nvidia/llama3-chatqa-1.5-70b"
+  },
+  "llama-3.1-70b-instruct": {
+    "feature": "llama-3.1-70b-instruct \u2012 Meta 70 B for complex conversations; $0.90 /M input/output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "meta/llama3-70b-instruct"
+  },
+  "llama-3.1-70b-instruct_think": {
+    "feature": "llama-3.1-70b-instruct \u2012 Meta 70 B for complex conversations; $0.90 /M input/output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "meta/llama3-70b-instruct"
+  },
+  "llama3-70b-instruct": {
+    "feature": "llama3-70b-instruct \u2012 alternate naming of Meta\u2019s 70 B; $0.90 /M input & output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "llama3-70b-instruct_think": {
+    "feature": "llama3-70b-instruct \u2012 alternate naming of Meta\u2019s 70 B; $0.90 /M input & output.",
+    "input_price": 0.9,
+    "output_price": 0.9,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "granite-34b-code-instruct": {
+    "feature": "granite-34b-code-instruct \u2012 34 B IBM coder model; $0.80 /M input and output.",
+    "input_price": 0.8,
+    "output_price": 0.8,
+    "model": "ibm/granite-34b-code-instruct"
+  },
+  "granite-34b-code-instruct_think": {
+    "feature": "granite-34b-code-instruct \u2012 34 B IBM coder model; $0.80 /M input and output.",
+    "input_price": 0.8,
+    "output_price": 0.8,
+    "model": "ibm/granite-34b-code-instruct"
+  },
+  "mixtral-8x7b-instruct-v0.1": {
+    "feature": "mixtral-8\u00d77b-instruct-v0.1 \u2012 56 B MoE (8\u00d77 B) for creative text; $0.60 /M input/output.",
+    "input_price": 0.6,
+    "output_price": 0.6,
+    "model": "mistralai/mixtral-8x7b-instruct-v0.1"
+  },
+  "mixtral-8x7b-instruct-v0.1_think": {
+    "feature": "mixtral-8\u00d77b-instruct-v0.1 \u2012 56 B MoE (8\u00d77 B) for creative text; $0.60 /M input/output.",
+    "input_price": 0.6,
+    "output_price": 0.6,
+    "model": "mistralai/mixtral-8x7b-instruct-v0.1"
+  },
+  "deepseek-r1": {
+    "feature": "deepseek-r1 \u2012 671 B-param reasoning powerhouse; Together charges $3 /M input tokens and $7 /M output tokens.",
+    "input_price": 0.55,
+    "output_price": 2.19,
+    "model": "deepseek-ai/deepseek-r1"
+  },
+  "deepseek-r1_think": {
+    "feature": "deepseek-r1 \u2012 671 B-param reasoning powerhouse; Together charges $3 /M input tokens and $7 /M output tokens.",
+    "input_price": 0.55,
+    "output_price": 2.19,
+    "model": "deepseek-ai/deepseek-r1"
+  },
+  "mixtral-8x22b-instruct-v0.1": {
+    "feature": "mixtral-8\u00d722b-instruct-v0.1 \u2012 176 B MoE (8\u00d722 B); $1.20 /M input and output.",
+    "input_price": 1.2,
+    "output_price": 1.2,
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1"
+  },
+  "mixtral-8x22b-instruct-v0.1_think": {
+    "feature": "mixtral-8\u00d722b-instruct-v0.1 \u2012 176 B MoE (8\u00d722 B); $1.20 /M input and output.",
+    "input_price": 1.2,
+    "output_price": 1.2,
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1"
+  },
+  "palmyra-creative-122b": {
+    "feature": "palmyra-creative-122b \u2012 122 B parameter model from Writer, optimized for creative and marketing content generation; $1.80 /M input and $1.80 /M output.",
+    "input_price": 1.8,
+    "output_price": 1.8,
+    "model": "writer/palmyra-creative-122b"
+  },
+  "palmyra-creative-122b_think": {
+    "feature": "palmyra-creative-122b \u2012 122 B parameter model from Writer, optimized for creative and marketing content generation; $1.80 /M input and $1.80 /M output.",
+    "input_price": 1.8,
+    "output_price": 1.8,
+    "model": "writer/palmyra-creative-122b"
+  }
+}

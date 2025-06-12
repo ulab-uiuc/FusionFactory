@@ -1,0 +1,86 @@
+{
+    "llama-3.3-nemotron-super-49b-v1": {
+        "feature": "llama-3.3-nemotron-super-49b-v1 \u2012 49 B Nemotron with high accuracy; $0.90 /M input and output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    },
+    "llama-3.3-nemotron-super-49b-v1_think": {
+        "feature": "llama-3.3-nemotron-super-49b-v1 \u2012 49 B Nemotron with high accuracy; $0.90 /M input and output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    },
+    "llama-3.1-nemotron-51b-instruct": {
+        "feature": "llama-3.1-nemotron-51b-instruct \u2012 51 B NVIDIA alignment model; $0.90 /M in & out.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama-3.1-nemotron-51b-instruct"
+    },
+    "llama-3.1-nemotron-51b-instruct_think": {
+        "feature": "llama-3.1-nemotron-51b-instruct \u2012 51 B NVIDIA alignment model; $0.90 /M in & out.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama-3.1-nemotron-51b-instruct"
+    },
+    "llama3-chatqa-1.5-70b": {
+        "feature": "llama3-chatqa-1.5-70b \u2012 70 B chat-optimized Llama; $0.90 /M input and output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama3-chatqa-1.5-70b"
+    },
+    "llama3-chatqa-1.5-70b_think": {
+        "feature": "llama3-chatqa-1.5-70b \u2012 70 B chat-optimized Llama; $0.90 /M input and output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "nvidia/llama3-chatqa-1.5-70b"
+    },
+    "llama-3.1-70b-instruct": {
+        "feature": "llama-3.1-70b-instruct \u2012 Meta 70 B for complex conversations; $0.90 /M input/output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "meta/llama3-70b-instruct"
+    },
+    "llama-3.1-70b-instruct_think": {
+        "feature": "llama-3.1-70b-instruct \u2012 Meta 70 B for complex conversations; $0.90 /M input/output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "meta/llama3-70b-instruct"
+    },
+    "llama3-70b-instruct": {
+        "feature": "llama3-70b-instruct \u2012 alternate naming of Meta\u2019s 70 B; $0.90 /M input & output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "meta/llama-3.1-8b-instruct"
+    },
+    "llama3-70b-instruct_think": {
+        "feature": "llama3-70b-instruct \u2012 alternate naming of Meta\u2019s 70 B; $0.90 /M input & output.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "meta/llama-3.1-8b-instruct"
+    },
+    "granite-34b-code-instruct": {
+        "feature": "granite-34b-code-instruct \u2012 34 B IBM coder model; $0.80 /M input and output.",
+        "input_price": 0.8,
+        "output_price": 0.8,
+        "model": "ibm/granite-34b-code-instruct"
+    },
+    "granite-34b-code-instruct_think": {
+        "feature": "granite-34b-code-instruct \u2012 34 B IBM coder model; $0.80 /M input and output.",
+        "input_price": 0.8,
+        "output_price": 0.8,
+        "model": "ibm/granite-34b-code-instruct"
+    },
+    "mixtral-8x7b-instruct-v0.1": {
+        "feature": "mixtral-8\u00d77b-instruct-v0.1 \u2012 56 B MoE (8\u00d77 B) for creative text; $0.60 /M input/output.",
+        "input_price": 0.6,
+        "output_price": 0.6,
+        "model": "mistralai/mixtral-8x7b-instruct-v0.1"
+    },
+    "mixtral-8x7b-instruct-v0.1_think": {
+        "feature": "mixtral-8\u00d77b-instruct-v0.1 \u2012 56 B MoE (8\u00d77 B) for creative text; $0.60 /M input/output.",
+        "input_price": 0.6,
+        "output_price": 0.6,
+        "model": "mistralai/mixtral-8x7b-instruct-v0.1"
+    }
+}

@@ -1,0 +1,38 @@
+{
+  "deepseek-r1": {
+    "feature": "deepseek-r1 \u2012 671 B-param reasoning powerhouse; Together charges $3 /M input tokens and $7 /M output tokens.",
+    "input_price": 0.55,
+    "output_price": 2.19,
+    "model": "deepseek-ai/deepseek-r1"
+  },
+  "deepseek-r1_think": {
+    "feature": "deepseek-r1 \u2012 671 B-param reasoning powerhouse; Together charges $3 /M input tokens and $7 /M output tokens.",
+    "input_price": 0.55,
+    "output_price": 2.19,
+    "model": "deepseek-ai/deepseek-r1"
+  },
+  "mixtral-8x22b-instruct-v0.1": {
+    "feature": "mixtral-8\u00d722b-instruct-v0.1 \u2012 176 B MoE (8\u00d722 B); $1.20 /M input and output.",
+    "input_price": 1.2,
+    "output_price": 1.2,
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1"
+  },
+  "mixtral-8x22b-instruct-v0.1_think": {
+    "feature": "mixtral-8\u00d722b-instruct-v0.1 \u2012 176 B MoE (8\u00d722 B); $1.20 /M input and output.",
+    "input_price": 1.2,
+    "output_price": 1.2,
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1"
+  },
+  "palmyra-creative-122b": {
+    "feature": "palmyra-creative-122b \u2012 122 B parameter model from Writer, optimized for creative and marketing content generation; $1.80 /M input and $1.80 /M output.",
+    "input_price": 1.8,
+    "output_price": 1.8,
+    "model": "writer/palmyra-creative-122b"
+  },
+  "palmyra-creative-122b_think": {
+    "feature": "palmyra-creative-122b \u2012 122 B parameter model from Writer, optimized for creative and marketing content generation; $1.80 /M input and $1.80 /M output.",
+    "input_price": 1.8,
+    "output_price": 1.8,
+    "model": "writer/palmyra-creative-122b"
+  }
+}

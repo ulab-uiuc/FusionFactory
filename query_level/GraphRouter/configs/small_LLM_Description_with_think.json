@@ -1,0 +1,122 @@
+{
+    "qwen2-7b-instruct": {
+      "feature": "qwen2-7b-instruct \u2012 Chinese & English LLM for language, coding, mathematics and reasoning; costs $0.20 per M input tokens and $0.20 per M output tokens on Together AI.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "qwen/qwen2-7b-instruct"
+    },
+    "qwen2-7b-instruct_think": {
+      "feature": "qwen2-7b-instruct \u2012 Chinese & English LLM for language, coding, mathematics and reasoning; costs $0.20 per M input tokens and $0.20 per M output tokens on Together AI.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "qwen/qwen2-7b-instruct"
+    },
+    "qwen2.5-7b-instruct": {
+      "feature": "qwen2.5-7b-instruct \u2012 upgraded Qwen with stronger multilingual capability; priced at $0.30 /M input and $0.30 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "qwen/qwen2.5-7b-instruct"
+    },
+    "qwen2.5-7b-instruct_think": {
+      "feature": "qwen2.5-7b-instruct \u2012 upgraded Qwen with stronger multilingual capability; priced at $0.30 /M input and $0.30 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "qwen/qwen2.5-7b-instruct"
+    },
+    "gemma-7b": {
+      "feature": "gemma-7b \u2012 Google\u2019s lightweight 7 B model for text and code; Together cost is $0.20 /M input and $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "google/gemma-7b"
+    },
+    "gemma-7b_think": {
+      "feature": "gemma-7b \u2012 Google\u2019s lightweight 7 B model for text and code; Together cost is $0.20 /M input and $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "google/gemma-7b"
+    },
+    "codegemma-7b": {
+      "feature": "codegemma-7b \u2012 Gemma variant focused on code generation & completion; $0.20 /M input, $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "google/codegemma-7b"
+    },
+    "codegemma-7b_think": {
+      "feature": "codegemma-7b \u2012 Gemma variant focused on code generation & completion; $0.20 /M input, $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "google/codegemma-7b"
+    },
+    "gemma-2-9b-it": {
+      "feature": "gemma-2-9b-it \u2012 2.9 B instruction-tuned Gemma for general text; ultralow $0.10 /M input and $0.10 /M output.",
+      "input_price": 0.1,
+      "output_price": 0.1,
+      "model": "google/gemma-2-9b-it"
+    },
+    "gemma-2-9b-it_think": {
+      "feature": "gemma-2-9b-it \u2012 2.9 B instruction-tuned Gemma for general text; ultralow $0.10 /M input and $0.10 /M output.",
+      "input_price": 0.1,
+      "output_price": 0.1,
+      "model": "google/gemma-2-9b-it"
+    },
+    "llama-3.1-8b-instruct": {
+      "feature": "llama-3.1-8b-instruct \u2012 Meta\u2019s 8 B Llama-3 series for chat & reasoning; $0.20 /M input and $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "meta/llama-3.1-8b-instruct"
+    },
+    "llama-3.1-8b-instruct_think": {
+      "feature": "llama-3.1-8b-instruct \u2012 Meta\u2019s 8 B Llama-3 series for chat & reasoning; $0.20 /M input and $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "meta/llama-3.1-8b-instruct"
+    },
+    "granite-3.0-8b-instruct": {
+      "feature": "granite-3.0-8b-instruct \u2012 IBM small LLM supporting RAG, summarization & code; $0.20 /M input, $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "ibm/granite-3.0-8b-instruct"
+    },
+    "granite-3.0-8b-instruct_think": {
+      "feature": "granite-3.0-8b-instruct \u2012 IBM small LLM supporting RAG, summarization & code; $0.20 /M input, $0.20 /M output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "ibm/granite-3.0-8b-instruct"
+    },
+    "llama3-chatqa-1.5-8b": {
+      "feature": "llama3-chatqa-1.5-8b \u2012 NVIDIA fine-tuned 8 B for QA & reasoning; $0.20 /M input and output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "nvidia/llama3-chatqa-1.5-8b"
+    },
+    "llama3-chatqa-1.5-8b_think": {
+      "feature": "llama3-chatqa-1.5-8b \u2012 NVIDIA fine-tuned 8 B for QA & reasoning; $0.20 /M input and output.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "nvidia/llama3-chatqa-1.5-8b"
+    },
+    "mistral-nemo-12b-instruct": {
+      "feature": "mistral-nemo-12b-instruct \u2012 12 B model combining Mistral and NeMo tech; $0.30 /M input, $0.30 /M output.",
+      "input_price": 0.3,
+      "output_price": 0.3,
+      "model": "nv-mistralai/mistral-nemo-12b-instruct"
+    },
+    "mistral-nemo-12b-instruct_think": {
+      "feature": "mistral-nemo-12b-instruct \u2012 12 B model combining Mistral and NeMo tech; $0.30 /M input, $0.30 /M output.",
+      "input_price": 0.3,
+      "output_price": 0.3,
+      "model": "nv-mistralai/mistral-nemo-12b-instruct"
+    },
+    "mistral-7b-instruct-v0.3": {
+      "feature": "mistral-7b-instruct-v0.3 \u2012 fast 7 B model for instruction following; $0.20 /M in & out.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "mistralai/mistral-7b-instruct-v0.3"
+    },
+    "mistral-7b-instruct-v0.3_think": {
+      "feature": "mistral-7b-instruct-v0.3 \u2012 fast 7 B model for instruction following; $0.20 /M in & out.",
+      "input_price": 0.2,
+      "output_price": 0.2,
+      "model": "mistralai/mistral-7b-instruct-v0.3"
+    }
+  }

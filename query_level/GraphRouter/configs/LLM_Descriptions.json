@@ -1,0 +1,62 @@
+{
+    "LLaMA-3 (8b)": {
+        "feature": "This is a relatively small-sized model (8 billion parameters) designed for general-purpose\nlanguage tasks. Its low cost per million tokens (0.2) makes it an affordable option for many\napplications requiring quick responses with moderate accuracy.",
+        "input_price": 0.2,
+        "output_price": 0.2,
+        "model": "together_ai/meta-llama/Llama-3-8b-chat-hf"
+    },
+    "Mixtral-8x7B": {
+        "feature": "With a combined size of 56 billion parameters, this model aims to provide stronger language\nmodeling capabilities. Its cost per million tokens is 0.6, reflecting its balance between\nperformance and affordability for more complex tasks.",
+        "input_price": 0.6,
+        "output_price": 0.6,
+        "model": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1"
+    },
+    "NousResearch": {
+        "feature": "A mid-sized model with 34 billion parameters, suitable for handling moderately complex\nlanguage tasks. Its cost is higher at 0.8 per million tokens, indicating a greater computational\ndemand, likely due to its enhanced capabilities over smaller models.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "together_ai/NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO"
+    },
+    "LLaMA-2 (7b)": {
+        "feature": "A compact model at 7 billion parameters, it offers similar capabilities and pricing to LLaMA-3\n(7b) at a cost of 0.2 per million tokens. It’s an efficient choice for tasks requiring decent\nperformance without high computational costs.",
+        "input_price": 0.2,
+        "output_price": 0.2,
+        "model": "together_ai/meta-llama/Llama-2-7b-chat-hf"
+    },
+    "Mistral-7b": {
+        "feature": "With 7 billion parameters, Mistral-7b is optimized for lightweight tasks, balancing speed and\nefficiency. Its cost per million tokens is 0.2, making it cost-effective for standard use cases\nwithout the need for complex computations.",
+        "input_price": 0.2,
+        "output_price": 0.2,
+        "model": "together_ai/mistralai/Mistral-7B-Instruct-v0.3"
+    },
+    "LLaMA-3 (70b)": {
+        "feature": "A larger variant of LLaMA-3, this model has 70 billion parameters, providing advanced capa-\nbilities for complex tasks. Its cost per million tokens is 0.9, indicating its higher computational\ndemand and enhanced performance.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "together_ai/meta-llama/Llama-3-70b-chat-hf"
+    },
+    "LLaMA-3-Turbo (8b)": {
+        "feature": "A variant optimized for speed and efficiency with 8 billion parameters. Its cost per million\ntokens is only 0.2, suggesting that it is designed to handle tasks quickly while being highly\ncost-effective.",
+        "input_price": 0.2,
+        "output_price": 0.2,
+        "model": "together_ai/meta-llama/Meta-Llama-3-8B-Instruct-Turbo"
+    },
+    "LLaMA-3-Turbo (70b)": {
+        "feature": "This model, at 70 billion parameters, is tailored for high performance with an emphasis on\nefficiency. The cost is 0.9 per million tokens, reflecting its advanced capabilities for a broad\nrange of tasks requiring more computation.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "together_ai/meta-llama/Meta-Llama-3-70B-Instruct-Turbo"
+    },
+    "Llama-3.1-Turbo (70b)": {
+        "feature": "Large model with 70 billion parameters, likely to offer strong capabilities for various language\ntasks. Its cost is also 0.9 per million tokens, suggesting similar performance and computational\nneeds as other 70b models.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "together_ai/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo"
+    },
+    "Qwen-1.5 (72b)": {
+        "feature": "With 72 billion parameters, Qwen-1.5 is among the largest models in the list, designed for\nhigh-complexity tasks. Its cost per million tokens is 0.9, making it comparable to other\nhigh-performance models in terms of both capability and expense.",
+        "input_price": 0.9,
+        "output_price": 0.9,
+        "model": "together_ai/Qwen/Qwen1.5-72B-Chat"
+    }
+}
