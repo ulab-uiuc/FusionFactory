@@ -297,8 +297,8 @@ def generate_thought_template_with_llm(
         # If it fails, handle it as a string-by-string collection
         from openai import OpenAI
         client = OpenAI(
-            base_url="https://integrate.api.nvidia.com/v1",
-            api_key="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",
+            base_url="",
+            api_key="",
             timeout=300,
             max_retries=2
         )
@@ -619,7 +619,7 @@ if __name__ == "__main__":
     parser.add_argument("--top_n", type=int, default=3, help="Number of top performers to select for each query")
     parser.add_argument("--output_path", type=str, default="router_analysis_results.json", 
                         help="Path to save the detailed results to")
-    parser.add_argument("--template_dataset_path", type=str, default="/data/taofeng2/Router_bench/zijie/full_test_data_process/hybrid_thought_template/thought_templates_8b_small.csv",
+    parser.add_argument("--template_dataset_path", type=str, default="",
                         help="Path to save the summarized dataset with templates")
     parser.add_argument("--llm_model", type=str, default="nvdev/nvidia/llama-3.1-8b-instruct",
                         help="Model to use for generating templates")

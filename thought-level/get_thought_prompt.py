@@ -6,6 +6,7 @@ import os
 import time
 from functools import partial
 from tqdm import tqdm
+from datasets import load_dataset
 
 def parse_embedding(embedding_str):
     # import pdb; pdb.set_trace()
@@ -44,21 +45,18 @@ def parse_embedding(embedding_str):
         print(f"Error parsing embedding: {str(e)}")
         return None
 
-def create_sample_dataframe(queries_file_path, samples_per_task=3, random_state=42):
+def create_sample_dataframe(queries_df, samples_per_task=3, random_state=42):
     """
     Create a sampled DataFrame with a specified number of queries per task.
     
     Args:
-        queries_file_path: Path to the CSV with queries to process
+        queries_df: DataFrame with queries to process
         samples_per_task: Number of samples per unique task description
         random_state: Random seed for reproducible sampling
     
     Returns:
         DataFrame with sampled queries
     """
-    # Load the queries file
-    print(f"Loading queries from {queries_file_path}...")
-    queries_df = pd.read_csv(queries_file_path)
     original_count = len(queries_df)
     print(f"Original queries count: {original_count}")
     
@@ -179,13 +177,13 @@ def process_query_chunk(chunk_data, template_df):
     
     return results
 
-def process_queries_parallel(input_df, template_file_path, num_processes=None, chunk_size=100):
+def process_queries_parallel(input_df, template_df, num_processes=None, chunk_size=100):
     """
     Process queries in parallel using the provided DataFrame.
     
     Args:
         input_df: DataFrame containing queries to process
-        template_file_path: Path to the CSV with thought templates
+        template_df: DataFrame with thought templates
         num_processes: Number of processes to use (default: CPU count - 1)
         chunk_size: Number of queries to process in each chunk
         
@@ -194,8 +192,6 @@ def process_queries_parallel(input_df, template_file_path, num_processes=None, c
     """
     start_time = time.time()
     
-    # Load template file
-    template_df = pd.read_csv(template_file_path)
     print(f"Loaded {len(template_df)} templates")
     
     # Create a copy of input DataFrame for results
@@ -253,10 +249,16 @@ def process_queries_parallel(input_df, template_file_path, num_processes=None, c
 
 # Example usage
 if __name__ == "__main__":
-    # Replace with your actual file paths
-    template_file = "/data/taofeng2/Router_bench/zijie/full_test_data_process/hybrid_thought_template/thought_template_70b_small.csv"
-    queries_file = "/data/taofeng2/Router_bench/router_data/router_quac_test_full_0608.csv"
-    output_file = "/data/taofeng2/Router_bench/zijie/full_test_data_process/new_benchmark_data/quac_hybrid_70b_small_0609.csv"
+    # Load data from HuggingFace dataset
+    dataset = load_dataset("ulab-ai/FusionBench")
+    queries_df = pd.DataFrame(dataset['partial_test'])
+    
+    # Load template data
+    template_file = "thought_template_70b_full.csv"
+    template_df = pd.read_csv(template_file)
+    
+    # Set output file path
+    output_file = "thought_prompt_output.csv"
     
     # Step 1: Create a sampled DataFrame (for testing)
     # Comment this out and use the full queries_df for production
@@ -264,13 +266,11 @@ if __name__ == "__main__":
     
     if sample_mode:
         print("SAMPLE MODE: Creating a sample of 3 queries per task")
-        queries_df = create_sample_dataframe(queries_file, samples_per_task=3)
+        queries_df = create_sample_dataframe(queries_df, samples_per_task=3)
         # Save the sample for inspection if needed
         queries_df.to_csv("sample_queries.csv", index=False)
     else:
         print("FULL MODE: Processing all queries")
-        queries_df = pd.read_csv(queries_file)
-        queries_df = queries_df[::2]
 
     if sample_mode:
         # For sample mode, use smaller chunks to get better parallelism
@@ -283,11 +283,10 @@ if __name__ == "__main__":
     
     result_df = process_queries_parallel(
         queries_df,
-        template_file,
+        template_df,
         num_processes=num_processes,
         chunk_size=chunk_size
     )
-
     
     # Save results
     result_df.to_csv(output_file, index=False)

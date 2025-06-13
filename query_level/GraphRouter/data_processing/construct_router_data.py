@@ -3,10 +3,13 @@ from utils import savejson,loadjson,savepkl,loadpkl,get_embedding
 import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import yaml
+from datasets import load_dataset
 
 class data_building:
-    def __init__(self,qa_path,llm_path,config):
-        self.qa_data=pd.read_csv(qa_path)
+    def __init__(self, llm_path, config):
+        # Load data from HuggingFace dataset
+        dataset = load_dataset("ulab-ai/FusionBench")
+        self.qa_data = pd.DataFrame(dataset['train'])
         self.llm_description = loadjson(llm_path)
         self.llm_names = list(self.llm_description.keys())
         self.all_llm_description = []
@@ -15,7 +18,6 @@ class data_building:
         self.MyLLMEngine = LLMEngine(llm_names=self.llm_names,llm_description=self.llm_description)
         self.config=config
         self.construct_data_with_LLM()
-
 
     def construct_data_with_LLM(self):
         df = pd.DataFrame(columns=['task_id', 'query','query_embedding', 'ground_truth', 'metric','llm',
@@ -59,4 +61,4 @@ if __name__ == "__main__":
     with open("configs/config.yaml", 'r', encoding='utf-8') as file:
         config = yaml.safe_load(file)
     os.environ["TOGETHERAI_API_KEY"] = config["api_key"]
-    data_building(qa_path=config['unified_qa_data_path'],llm_path=config['llm_description_path'],config=config)
+    data_building(llm_path=config['llm_description_path'], config=config)
