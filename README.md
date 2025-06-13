@@ -129,23 +129,6 @@ You can refer to [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for d
 
 
 
-
-## 🔍 Evaluation
-
-### Running Evaluation
-
-To evaluate a model on a specific dataset, use the following command:
-
-```bash
-# dataset: Specifies the dataset to evaluate on
-# model_path: Path to the trained model you want to evaluate
-python eval/eval.py --dataset <dataset_name> --model_path <path_to_model>
-```
-
-
-
-
-
 ## Citation
 
 ```bibtex
