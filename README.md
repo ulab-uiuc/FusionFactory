@@ -36,7 +36,7 @@
 
 <div align="center">
   <img src="./figures/fusion.jpg" width="700" alt="FusionBench">
-  <p><b>Overview of LLM capability fusion explored through FusionBench, focusing on three representative levels: query-level, thought-level, and model-level.</b></p>
+  <p><b>Overview of LLM capability fusion via FusionBence with three representative levels: Query-level, Thought-level, and Model-level.</b></p>
 </div>
 
 
