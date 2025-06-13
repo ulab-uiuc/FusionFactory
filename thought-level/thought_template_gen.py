@@ -1,21 +1,38 @@
-#this file contains the code to generate thought templates. Given a trainset, we summarize thought template for each query
+#!/usr/bin/env python3
+"""
+Thought Template Generation Script
+
+This script generates thought templates for different types of queries by analyzing
+high-performing responses from small language models (7B-12B parameters).
+"""
+
 import os
 import pickle
 import time
 import threading
+import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Dict, Any, Tuple, Optional, Union
 from tqdm import tqdm
 from multiprocessing.dummy import Pool as ThreadPool
 import pandas as pd
 import numpy as np
-from typing import List, Dict, Any, Tuple, Optional, Union
 import re
 import json
 from collections import defaultdict
 from utils import model_prompting
 
-# Create checkpoint directory
-CHECKPOINT_DIR = "./checkpoints_thought_template_hybrid_small_8b"
-os.makedirs(CHECKPOINT_DIR, exist_ok=True)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Constants
+CHECKPOINT_DIR = Path("./checkpoints_thought_template_hybrid_small_8b")
+CHECKPOINT_DIR.mkdir(exist_ok=True)
 
 # List of small models to filter by
 SMALL_MODELS = [
@@ -41,19 +58,34 @@ SMALL_MODELS = [
     "mistral-7b-instruct-v0.3_think"
 ]
 
+@dataclass
+class Config:
+    """Configuration for thought template generation."""
+    file_path: str
+    top_n: int = 3
+    output_path: str = "router_analysis_results.json"
+    template_dataset_path: str = "thought_templates_hybrid.csv"
+    llm_model: str = "nvdev/nvidia/llama-3.1-8b-instruct"
+    queries_per_task: int = 3
+    p_num: int = 6
+    checkpoint_interval: int = 1000
+    retry_failed: bool = False
+    max_retries: int = 3
+    error_threshold: float = 0.1
+
 class CheckpointManager:
-    """Simple checkpoint manager for query processing."""
+    """Manages checkpoints for query processing."""
     
-    def __init__(self, prefix="query_checkpoint", save_interval=10):
+    def __init__(self, prefix: str = "query_checkpoint", save_interval: int = 10):
         self.prefix = prefix
         self.save_interval = save_interval
-        self.results = {}  # query -> (best_performers, template, success)
+        self.results: Dict[str, Tuple] = {}
         self.save_lock = threading.Lock()
         self.processed_count = 0
         self.error_count = 0
         self.load_latest_checkpoint()
     
-    def add_result(self, query, best_performers, template, success):
+    def add_result(self, query: str, best_performers: pd.DataFrame, template: str, success: bool) -> None:
         """Add a processed query result."""
         self.results[query] = (best_performers, template, success)
         self.processed_count += 1
@@ -63,32 +95,30 @@ class CheckpointManager:
             
         if self.processed_count % self.save_interval == 0:
             self.save_checkpoint()
-            print(f"Progress: Processed {self.processed_count} queries, Errors: {self.error_count}")
+            logger.info(f"Progress: Processed {self.processed_count} queries, Errors: {self.error_count}")
     
-    def save_checkpoint(self):
+    def save_checkpoint(self) -> None:
         """Save current results to a checkpoint file."""
         timestamp = int(time.time())
         filename = f"{self.prefix}_{timestamp}.pkl"
-        filepath = os.path.join(CHECKPOINT_DIR, filename)
-        tmp_filepath = f"{filepath}.tmp"
+        filepath = CHECKPOINT_DIR / filename
+        tmp_filepath = filepath.with_suffix('.pkl.tmp')
         
         with self.save_lock:
             with open(tmp_filepath, 'wb') as f:
                 pickle.dump(self.results, f, protocol=pickle.HIGHEST_PROTOCOL)
             os.replace(tmp_filepath, filepath)
     
-    def load_latest_checkpoint(self):
+    def load_latest_checkpoint(self) -> None:
         """Load most recent checkpoint if available."""
-        checkpoint_files = [f for f in os.listdir(CHECKPOINT_DIR) 
-                           if f.startswith(self.prefix) and f.endswith('.pkl')]
+        checkpoint_files = list(CHECKPOINT_DIR.glob(f"{self.prefix}_*.pkl"))
         
         if not checkpoint_files:
-            print("No checkpoints found. Starting fresh.")
+            logger.info("No checkpoints found. Starting fresh.")
             return
         
         # Sort by timestamp (newest first)
-        checkpoint_files.sort(reverse=True)
-        latest_checkpoint = os.path.join(CHECKPOINT_DIR, checkpoint_files[0])
+        latest_checkpoint = max(checkpoint_files, key=lambda x: x.stat().st_mtime)
         
         try:
             with open(latest_checkpoint, 'rb') as f:
@@ -98,152 +128,83 @@ class CheckpointManager:
             self.processed_count = len(self.results)
             self.error_count = sum(1 for _, _, success in self.results.values() if not success)
             
-            print(f"Loaded checkpoint with {self.processed_count} queries, Errors: {self.error_count}")
+            logger.info(f"Loaded checkpoint with {self.processed_count} queries, Errors: {self.error_count}")
         except Exception as e:
-            print(f"Error loading checkpoint: {e}")
+            logger.error(f"Error loading checkpoint: {e}")
             self.results = {}
     
-    def get_successful_queries(self):
+    def get_successful_queries(self) -> List[str]:
         """Get list of successfully processed queries."""
         return [query for query, (_, _, success) in self.results.items() if success]
     
-    def get_failed_queries(self):
+    def get_failed_queries(self) -> List[str]:
         """Get list of failed queries."""
         return [query for query, (_, _, success) in self.results.items() if not success]
     
-    def get_best_performers(self, query):
+    def get_best_performers(self, query: str) -> Optional[pd.DataFrame]:
         """Get best performers for a query if successful."""
         if query in self.results and self.results[query][2]:  # Check success flag
             return self.results[query][0]
         return None
     
-    def get_template(self, query):
+    def get_template(self, query: str) -> Optional[str]:
         """Get template for a query if successful."""
         if query in self.results and self.results[query][2]:  # Check success flag
             return self.results[query][1]
         return None
 
-# Include these original functions from your code
 def load_dataset(file_path: str) -> pd.DataFrame:
-    """
-    Load the router dataset from a file.
-    Handles different file formats like CSV, JSON, or parquet.
-    
-    Args:
-        file_path: Path to the dataset file
+    """Load the router dataset from a file."""
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"Dataset file not found: {file_path}")
         
-    Returns:
-        DataFrame containing the router dataset
-    """
-    if file_path.endswith('.csv'):
+    if file_path.suffix == '.csv':
         return pd.read_csv(file_path)
-    elif file_path.endswith('.json'):
+    elif file_path.suffix == '.json':
         return pd.read_json(file_path)
-    elif file_path.endswith('.parquet'):
+    elif file_path.suffix == '.parquet':
         return pd.read_parquet(file_path)
     else:
-        raise ValueError(f"Unsupported file format: {file_path}")
+        raise ValueError(f"Unsupported file format: {file_path.suffix}")
 
-def normalize_query_boolq(q):
-    """
-    Special normalization function for BoolQ queries that handles whitespace properly.
-    
-    Args:
-        q: Query string
-        
-    Returns:
-        Normalized query string
-    """
+def normalize_query_boolq(q: str) -> str:
+    """Special normalization function for BoolQ queries."""
     if not isinstance(q, str):
         return q
-    # First normalize all whitespace (convert newlines, tabs, multiple spaces to single space)
     q = re.sub(r'\s+', ' ', q)
-    # Then remove the phrase with a more flexible regex
     q = re.sub(r"\s*let'?s think step by step\.?\s*$", "", q, flags=re.IGNORECASE)
-    # Trim any remaining whitespace
     return q.strip()
 
 def group_by_task_and_query(data: pd.DataFrame) -> Dict[str, Dict[str, pd.DataFrame]]:
-    """
-    Group the data first by task_name and then by query.
-    
-    Args:
-        data: DataFrame containing the router dataset
-        
-    Returns:
-        Nested dictionary mapping task_name -> query -> dataframe
-    """
-    # Create a copy
+    """Group the data first by task_name and then by query."""
     data_copy = data.copy()
     
-    # Handle different normalization for different tasks
     def normalize_with_task(row):
         if row['task_name'] == 'boolq':
-            # Use special handling for BoolQ
             return normalize_query_boolq(row['query'])
         else:
-            # Use standard normalization for other tasks
             return re.sub(r"\s*let's think step by step\.?\s*$", "", row['query'], flags=re.IGNORECASE).strip() if isinstance(row['query'], str) else row['query']
     
-    # Apply normalization based on task
     data_copy['normalized_query'] = data_copy.apply(normalize_with_task, axis=1)
     
-    # Create nested dictionary
     task_query_groups = defaultdict(dict)
     
-    # First group by task_name
     for task_name, task_group in data_copy.groupby('task_name'):
-        # Then group each task's data by normalized query
         for query, query_group in task_group.groupby('normalized_query'):
             task_query_groups[task_name][query] = query_group
     
     return task_query_groups
 
-def find_best_performers(query_group: pd.DataFrame, n: int, metric: str = 'llm_judge') -> pd.DataFrame:
-    """
-    For each query, find the top n performers based on performance and cost.
-    When performance is the same, select the ones with lower cost.
-    
-    Args:
-        query_group: DataFrame containing data for a specific query
-        n: Number of top performers to select
-        metric: Metric to use for sorting (default: 'performance')
-        
-    Returns:
-        DataFrame containing the top n performers
-    """
-    # # Sort by performance (descending) and then by cost (ascending)
-    # sorted_group = query_group.sort_values(by=[metric, 'cost'], ascending=[False, True])
-
-    # First stage: Sort by performance (descending) and cost (ascending)
+def find_best_performers(query_group: pd.DataFrame, n: int) -> pd.DataFrame:
+    """Find the top n performers based on performance and cost."""
     first_stage = query_group.sort_values(by=['performance', 'cost'], ascending=[False, True])
-    
-    # Take the top first_stage_n performers from first stage
     first_stage_performers = first_stage.head(5)
-    
-    # Second stage: Sort these by llm_judge (descending) and cost (ascending)
     second_stage = first_stage_performers.sort_values(by=['llm_judge', 'cost'], ascending=[False, True])
-
-    top_performers = second_stage.head(3)
-
-    
-    # Take the top n performers
-    # top_performers = sorted_group.head(n)
-    
-    return top_performers
+    return second_stage.head(n)
 
 def generate_thought_template_prompt(query: str, best_responses: List[str]) -> str:
-    """
-    Create a prompt for the LLM to generate a concise thought template based on top responses,
-    with emphasis on chain-of-thought reasoning for specific problem types like GSM8K.
-    
-    Args:
-        query: The query that was answered
-        best_responses: List of top-performing responses
-        
-    Returns:
-        Prompt for the LLM
-    """
+    """Create a prompt for the LLM to generate a thought template."""
     prompt = f"""Given this question and example solutions, extract a concise thought template that captures the effective reasoning pattern and can serve as guidance:
 
 Question: {query}
@@ -251,9 +212,7 @@ Question: {query}
 Here are {len(best_responses)} high-performing solutions:
 """
     
-    # Add each response
     for i, response in enumerate(best_responses, 1):
-        # Truncate very long responses
         if len(response) > 1000:
             response = response[:1000] + "... [truncated]"
         prompt += f"Solution {i}:\n{response}\n\n"
@@ -277,15 +236,11 @@ def generate_thought_template_with_llm(
     llm_model: str = "deepseek-ai/deepseek-r1",
     max_token_num: int = 1024,
 ) -> str:
-    # Extract responses only
+    """Generate a thought template using the specified LLM."""
     responses = best_performers['response'].tolist()
-    
-    # Create the prompt for the LLM without metrics
     prompt = generate_thought_template_prompt(query, responses)
-
     
     try:
-        # Try to use the existing function with stream=False
         thought_template = model_prompting(
             llm_model=llm_model,
             prompt=prompt,
@@ -294,7 +249,6 @@ def generate_thought_template_with_llm(
             stream=False
         )
     except AttributeError:
-        # If it fails, handle it as a string-by-string collection
         from openai import OpenAI
         client = OpenAI(
             base_url="",
@@ -308,12 +262,36 @@ def generate_thought_template_with_llm(
             messages=[{"role": "user", "content": prompt}],
             max_tokens=max_token_num,
             temperature=0.2,
-            stream=False  # Important: No streaming here
+            stream=False
         )
         
         thought_template = completion.choices[0].message.content
     
     return thought_template
+
+def process_query_parallel(query_data: Tuple[str, pd.DataFrame, str, int]) -> Tuple[str, Optional[pd.DataFrame], str, bool]:
+    """Process a single query with error handling."""
+    query, group, llm_model, top_n = query_data
+    
+    try:
+        small_model_group = group[group['llm'].isin(SMALL_MODELS)]
+
+        if small_model_group.empty:
+            raise ValueError(f"No small models found for query: {query[:50]}...")
+        
+        best_perf = find_best_performers(small_model_group, top_n)
+        task_desc = group['task_description'].iloc[0]
+        template = generate_thought_template_with_llm(
+            query=query,
+            task_description=task_desc,
+            best_performers=best_perf,
+            llm_model=llm_model
+        )
+        
+        return (query, best_perf, template, True)
+    except Exception as e:
+        logger.error(f"Error processing query '{query[:50]}...': {e}")
+        return (query, None, str(e), False)
 
 def create_summarized_dataset(
     data: pd.DataFrame,
@@ -321,27 +299,13 @@ def create_summarized_dataset(
     query_groups: Dict[str, pd.DataFrame],
     templates: Dict[str, str]
 ) -> pd.DataFrame:
-    """
-    Create a new dataset with the thought templates.
-    
-    Args:
-        data: Original dataset
-        selected_queries: Dictionary mapping task_name to list of selected queries
-        query_groups: Dictionary mapping each query to its corresponding data
-        templates: Dictionary mapping each query to its thought template
-        
-    Returns:
-        New DataFrame with thought templates
-    """
-    # Get unique task IDs, descriptions, queries, etc.
+    """Create a new dataset with the thought templates."""
     unique_data = []
     
     for task_name, queries in selected_queries.items():
         for query in queries:
-            # Take the first row for this query to get the common fields
             sample_row = query_groups[query].iloc[0].copy()
             
-            # Create a new row with the fields we want
             new_row = {
                 'task_name': sample_row['task_name'],
                 'task_id': sample_row['task_id'],
@@ -356,182 +320,88 @@ def create_summarized_dataset(
             
             unique_data.append(new_row)
     
-    # Create a new DataFrame
-    summarized_df = pd.DataFrame(unique_data)
-    
-    return summarized_df
+    return pd.DataFrame(unique_data)
 
-def process_query_parallel(query_data):
-    """
-    Process a single query with error handling.
+def analyze_router_dataset(config: Config) -> Dict[str, Any]:
+    """Main function to analyze the router dataset."""
+    logger.info(f"Loading dataset from {config.file_path}...")
+    data = load_dataset(config.file_path)
     
-    Args:
-        query_data: Tuple containing (query, group, llm_model, top_n)
-        
-    Returns:
-        Tuple containing results for this query with success flag
-    """
-    query, group, llm_model, top_n = query_data
-    
-    try:
-        #This is added to only use small models' response
-        small_model_group = group[group['llm'].isin(SMALL_MODELS)]
-
-        if small_model_group.empty:
-            raise ValueError(f"No small models found for query: {query[:50]}...")
-        
-        # Find best performers
-        best_perf = find_best_performers(small_model_group, top_n)
-        
-        # best_perf = find_best_performers(group, top_n)
-        
-        # Generate thought template
-        task_desc = group['task_description'].iloc[0]
-        template = generate_thought_template_with_llm(
-            query=query,
-            task_description=task_desc,
-            best_performers=best_perf,
-            llm_model=llm_model
-        )
-        
-        return (query, best_perf, template, True)  # Success flag
-    except Exception as e:
-        # print(f"Error processing query '{query[:50]}...': {e}")
-        return (query, None, str(e), False)  # Error flag
-
-def analyze_router_dataset(
-    file_path: str, 
-    top_n: int = 3, 
-    output_path: str = "router_analysis_results.json",
-    template_dataset_path: str = "thought_templates_hybrid.csv",
-    llm_model: str = "nvdev/nvidia/llama-3.1-nemotron-70b-instruct",
-    queries_per_task: int = 3,
-    p_num: int = 20,
-    checkpoint_interval: int = 5,
-    retry_failed: bool = False,
-    max_retries: int = 3,
-    error_threshold: float = 0.1  # 10% error threshold
-) -> Dict[str, Any]:
-    """
-    Main function to analyze the router dataset with checkpointing and error handling.
-    Revised 05/11/2025 -> Only considers responses from small models (7b-12b parameters).
-    
-    Args:
-        file_path: Path to the dataset file
-        top_n: Number of top performers to select for each query
-        output_path: Path to save the detailed results to
-        template_dataset_path: Path to save the summarized dataset with templates
-        llm_model: Model to use for generating templates
-        queries_per_task: Number of queries to process per task type
-        p_num: Number of concurrent processes/threads
-        checkpoint_interval: How often to save checkpoints (in queries)
-        retry_failed: Whether to retry failed queries from previous run
-        max_retries: Maximum number of retry attempts for failed queries
-        error_threshold: Maximum acceptable error rate (0.0 to 1.0)
-        
-    Returns:
-        Formatted results dictionary
-    """
-    # Load dataset
-    print(f"Loading dataset from {file_path}...")
-    data = load_dataset(file_path)
-    
-    # Group by task and then by query
-    print(f"Grouping data by task and query...")
+    logger.info("Grouping data by task and query...")
     task_query_groups = group_by_task_and_query(data)
-    print(f"Found {len(task_query_groups)} unique tasks")
+    logger.info(f"Found {len(task_query_groups)} unique tasks")
     
-    # Flatten the groups for easier processing while preserving task info
     all_query_groups = {}
     for task_name, query_dict in task_query_groups.items():
         for query, group in query_dict.items():
             all_query_groups[query] = group
     
-    # Select N queries per task
     selected_queries = {}
     for task_name, query_dict in task_query_groups.items():
-        # Get list of queries for this task
         task_queries = list(query_dict.keys())
-        
-        # Select minimum of queries_per_task or available queries
-        n_to_select = min(queries_per_task, len(task_queries))
+        n_to_select = min(config.queries_per_task, len(task_queries))
         selected = task_queries[:n_to_select]
-        
         selected_queries[task_name] = selected
-        print(f"Task '{task_name}': Selected {len(selected)} queries out of {len(task_queries)}")
+        logger.info(f"Task '{task_name}': Selected {len(selected)} queries out of {len(task_queries)}")
     
-    # Flatten the selected queries for processing
     queries_to_process = []
     for task_queries in selected_queries.values():
         queries_to_process.extend(task_queries)
     
-    # Initialize checkpoint manager
-    checkpoint_prefix = os.path.basename(file_path).split('.')[0] + "_checkpoint"
-    checkpoint_mgr = CheckpointManager(prefix=checkpoint_prefix, save_interval=checkpoint_interval)
+    checkpoint_prefix = Path(config.file_path).stem + "_checkpoint"
+    checkpoint_mgr = CheckpointManager(prefix=checkpoint_prefix, save_interval=config.checkpoint_interval)
     
-    # Determine which queries to process
-    if retry_failed:
-        # Only retry failed queries from previous run
+    if config.retry_failed:
         failed_queries = checkpoint_mgr.get_failed_queries()
         queries_to_process = [q for q in queries_to_process if q in failed_queries]
-        print(f"Retrying {len(queries_to_process)} failed queries from previous run")
+        logger.info(f"Retrying {len(queries_to_process)} failed queries from previous run")
     else:
-        # Skip already successful queries
         successful_queries = checkpoint_mgr.get_successful_queries()
         queries_to_process = [q for q in queries_to_process if q not in successful_queries]
     
-    print(f"Processing {len(queries_to_process)} queries across {len(selected_queries)} tasks")
+    logger.info(f"Processing {len(queries_to_process)} queries across {len(selected_queries)} tasks")
     
-    # If all queries are already processed, skip to results
     if not queries_to_process:
-        print("All queries already processed successfully. Skipping to results collection.")
+        logger.info("All queries already processed successfully. Skipping to results collection.")
     else:
-        # Process queries with retries
         retry_count = 0
-        while retry_count < max_retries:
-            # Prepare data for parallel processing
-            parallel_args = [(query, all_query_groups[query], llm_model, top_n) 
-                            for query in queries_to_process]
+        while retry_count < config.max_retries:
+            parallel_args = [(query, all_query_groups[query], config.llm_model, config.top_n) 
+                           for query in queries_to_process]
             
-            # Process in parallel
-            print(f"Processing queries in parallel with {p_num} workers... (Attempt {retry_count + 1}/{max_retries})")
+            logger.info(f"Processing queries in parallel with {config.p_num} workers... (Attempt {retry_count + 1}/{config.max_retries})")
             
-            with ThreadPool(p_num) as pool:
+            with ThreadPool(config.p_num) as pool:
                 for query, best_perf, template, success in tqdm(
                     pool.imap_unordered(process_query_parallel, parallel_args),
                     total=len(parallel_args),
                     desc="Processing queries"
                 ):
-                    # Add result to checkpoint manager
                     checkpoint_mgr.add_result(query, best_perf, template, success)
             
-            # Save checkpoint after each attempt
             checkpoint_mgr.save_checkpoint()
             
-            # Check error rate
             failed_queries = checkpoint_mgr.get_failed_queries()
             error_rate = len(failed_queries) / len(queries_to_process)
             
-            print(f"\nAttempt {retry_count + 1} completed. Error rate: {error_rate:.2%}")
+            logger.info(f"\nAttempt {retry_count + 1} completed. Error rate: {error_rate:.2%}")
             
-            if error_rate <= error_threshold:
-                print(f"Error rate ({error_rate:.2%}) is below threshold ({error_threshold:.2%}). Stopping retries.")
+            if error_rate <= config.error_threshold:
+                logger.info(f"Error rate ({error_rate:.2%}) is below threshold ({config.error_threshold:.2%}). Stopping retries.")
                 break
             
-            if retry_count < max_retries - 1:
-                print(f"Error rate above threshold. Retrying {len(failed_queries)} failed queries...")
+            if retry_count < config.max_retries - 1:
+                logger.info(f"Error rate above threshold. Retrying {len(failed_queries)} failed queries...")
                 queries_to_process = failed_queries
             else:
-                print(f"Maximum retries reached. {len(failed_queries)} queries still failed.")
+                logger.info(f"Maximum retries reached. {len(failed_queries)} queries still failed.")
             
             retry_count += 1
     
-    # Collect all results from checkpoint manager
     best_performers = {}
     templates = {}
     
     for query in all_query_groups.keys():
-        # Try to get from checkpoint if available
         best_perf = checkpoint_mgr.get_best_performers(query)
         template = checkpoint_mgr.get_template(query)
         
@@ -539,18 +409,15 @@ def analyze_router_dataset(
             best_performers[query] = best_perf
             templates[query] = template
     
-    # Report failures
     failed_queries = checkpoint_mgr.get_failed_queries()
     if failed_queries:
-        print(f"\nWarning: {len(failed_queries)} queries failed processing after {retry_count + 1} attempts:")
+        logger.warning(f"\nWarning: {len(failed_queries)} queries failed processing after {retry_count + 1} attempts:")
         for q in failed_queries[:min(5, len(failed_queries))]:
-            print(f"  - '{q[:50]}...'")
+            logger.warning(f"  - '{q[:50]}...'")
         if len(failed_queries) > 5:
-            print(f"  ... and {len(failed_queries) - 5} more")
+            logger.warning(f"  ... and {len(failed_queries) - 5} more")
     
-    # Create summarized dataset with thought templates for successful queries
-    print(f"Creating summarized dataset...")
-    # Filter selected_queries to only include successful ones
+    logger.info("Creating summarized dataset...")
     filtered_selected_queries = {}
     for task_name, queries in selected_queries.items():
         filtered_selected_queries[task_name] = [q for q in queries if q in templates]
@@ -562,17 +429,15 @@ def analyze_router_dataset(
         templates=templates
     )
     
-    # Save summarized dataset
-    if template_dataset_path:
-        print(f"Saving summarized dataset with thought templates to {template_dataset_path}...")
-        summarized_df.to_csv(template_dataset_path, index=False)
+    if config.template_dataset_path:
+        logger.info(f"Saving summarized dataset with thought templates to {config.template_dataset_path}...")
+        summarized_df.to_csv(config.template_dataset_path, index=False)
     
-    # Format detailed results for successful queries
-    print("Formatting detailed results...")
+    logger.info("Formatting detailed results...")
     formatted_results = {}
     for query, perf in best_performers.items():
         if query not in templates:
-            continue  # Skip if no template (failed query)
+            continue
             
         group = all_query_groups[query]
         formatted_results[query] = {
@@ -586,32 +451,29 @@ def analyze_router_dataset(
             'thought_template': templates[query]
         }
     
-    # Save detailed results
-    if output_path:
-        print(f"Saving detailed results to {output_path}...")
-        with open(output_path, 'w') as f:
+    if config.output_path:
+        logger.info(f"Saving detailed results to {config.output_path}...")
+        with open(config.output_path, 'w') as f:
             json.dump(formatted_results, f, indent=2)
     
-    # Print task distribution
-    print("\nTask distribution in processed dataset:")
+    logger.info("\nTask distribution in processed dataset:")
     task_counts = {}
     for task_name, queries in filtered_selected_queries.items():
         task_counts[task_name] = len(queries)
     
     for task_name, count in task_counts.items():
-        print(f"- {task_name}: {count} queries")
+        logger.info(f"- {task_name}: {count} queries")
     
-    # Final summary
     success_count = len(formatted_results)
     total_queries = len(queries_to_process) + len(checkpoint_mgr.get_successful_queries())
-    print(f"\nAnalysis complete! Successfully processed {success_count} out of {total_queries} queries")
-    print(f"Top {top_n} performers and thought templates for each query saved to {output_path}")
-    print(f"Summarized dataset with thought templates saved to {template_dataset_path}")
+    logger.info(f"\nAnalysis complete! Successfully processed {success_count} out of {total_queries} queries")
+    logger.info(f"Top {config.top_n} performers and thought templates for each query saved to {config.output_path}")
+    logger.info(f"Summarized dataset with thought templates saved to {config.template_dataset_path}")
     
     return formatted_results
 
-# Example usage
-if __name__ == "__main__":
+def main():
+    """Main entry point for the script."""
     import argparse
     
     parser = argparse.ArgumentParser(description="Analyze router dataset")
@@ -634,7 +496,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    results = analyze_router_dataset(
+    config = Config(
         file_path=args.file_path,
         top_n=args.top_n,
         output_path=args.output_path,
@@ -645,3 +507,8 @@ if __name__ == "__main__":
         checkpoint_interval=args.checkpoint_interval,
         retry_failed=args.retry_failed
     )
+    
+    analyze_router_dataset(config)
+
+if __name__ == "__main__":
+    main()
