@@ -35,10 +35,6 @@
 
 
 <div align="center">
-  <img src="./figures/comparison.jpg" width="700" alt="FusionBench">
-  <p><b>Comparison of FusionBench with Existing Router-related Work</b></p>
-  <img src="./figures/construction.jpg" width="700" alt="FusionBench">
-  <p><b>Overview of FusionBench’s Construction Process</b></p>
   <img src="./figures/fusion.jpg" width="700" alt="FusionBench">
   <p><b>Overview of LLM capability fusion explored through FusionBench, focusing on three representative levels: query-level, thought-level, and model-level.</b></p>
 </div>
