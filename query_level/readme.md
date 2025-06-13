@@ -26,14 +26,6 @@ query_level/
 └── readme.md               # This file
 ```
 
-## Installation
-
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Data Format
 
 The routing benchmarks expect JSON data with the following structure:
