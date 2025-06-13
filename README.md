@@ -28,8 +28,10 @@
 
 <p align="center">
     <a href="https://ulab-uiuc.github.io/FusionBench/">🌐 Project Page</a> |
-    <a href="http://arxiv.org/abs/xxxx.xxxxx">📜 arXiv</a>
-    <!-- <a href="xxx">📮 Twitter Post</a> -->
+    <a href="http://arxiv.org/abs/2410.03834">📜 arXiv</a> |
+    <a href="https://huggingface.co/datasets/ulab-ai/FusionBench">📂 Dataset</a>
+    <a href="https://huggingface.co/ulab-ai/FusionBench-model">🤖 Model</a>
+
 <p>
 
 
