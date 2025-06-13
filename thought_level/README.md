@@ -1,10 +1,29 @@
 # Thought Template Generation and Prompt Creation
 
-This module provides two main functionalities:
-1. Generating thought templates by analyzing high-performing responses from small language models (7B-12B parameters)
-2. Creating thought prompts for new queries by finding similar queries and their templates
+This module provides three main functionalities:
+1. Preprocessing the dataset to prepare it for model training
+2. Generating thought templates by analyzing high-performing responses from small language models (7B-12B parameters)
+3. Creating thought prompts for new queries by finding similar queries and their templates
 
 ## Overview
+
+### Data Preprocessing (`data_processing.py`)
+The data preprocessing pipeline:
+1. Loads the FusionBench dataset from HuggingFace
+2. Processes and normalizes performance and cost metrics
+3. Creates different scoring configurations for model training:
+   - Performance First (α=1, β=0)
+   - Balanced (α=0.5, β=0.5)
+   - Cost First (α=0.2, β=0.8)
+   - LLM Judge scores
+4. Generates JSON files for training and testing with each scoring strategy
+
+#### Usage
+```bash
+python data_processing.py
+```
+
+This script must be run first before training any baseline models, as it prepares the necessary training and testing data files.
 
 ### Thought Template Generation (`thought_template_gen.py`)
 The thought template generation process:

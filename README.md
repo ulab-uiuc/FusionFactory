@@ -84,11 +84,32 @@ python data_process/data_combine.py --split train --case_num 500 --round 5
 
 ### Query-level Fusion
 
+First, run the data preprocessing script to prepare the dataset:
+
+```bash
+# Preprocess the dataset and generate training/testing files
+python query_level/data_processing.py
+```
+
+For more detailed information about the data preprocessing and model training process, please refer to the specific README in the `query_level` directory.
 
 
 
 ### Thought-level Fusion
+First, run the data preprocessing script to prepare the thought prompts:
 
+```bash
+# Preprocess the dataset and generate training/testing files
+python query_level/data_processing.py
+```
+
+Or run the script to directly use Huggingface datasets to generate thought-enhanced queries
+
+```bash
+python thought_level/get_thought_prompt.py
+```
+
+For more detailed information about the data preprocessing and model training process, please refer to the specific README in the `thought_level` directory.
 
 
 ### Model-level Fusion
