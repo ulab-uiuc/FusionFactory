@@ -82,6 +82,7 @@ python data_process/data_combine.py \
 --api_key [YOUR_API_KEY]
 ```
 
+You may refer to the specific README in the `data_process` directory for detailed argument descriptions.
 
 
 <!-- Run the following command to start data collection, which will resume the collection of LLM judge data. -->
