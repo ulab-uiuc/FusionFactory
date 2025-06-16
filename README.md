@@ -57,7 +57,6 @@ pip install pandas
 pip install datasets
 pip install tqdm
 pip install transformers
-pip install litellm
 pip install sentence_transformers
 pip install torch
 pip install numpy
@@ -71,8 +70,21 @@ Run the following command to start data collection.
 
 ```bash
 # split: train OR test
-python data_process/data_combine.py --split train --case_num 500 --round 5
+# case num: 500 for train & 50 for partial test
+# a sample of LLM description: ./data_process/LLM_Descriptions.json
+python data_process/data_combine.py \
+--split train \
+--case_num 500 \
+--round 5 \
+--llm_description_path [YOUR_LLM_PATH] \
+--csv_save_path [YOUR_SAVE_PATH] \
+--api_base [YOUR_API_BASE] \
+--api_key [YOUR_API_KEY]
 ```
+
+
+
+<!-- Run the following command to start data collection, which will resume the collection of LLM judge data. -->
 
 
 
@@ -112,8 +124,8 @@ For more detailed information about the data preprocessing and model training pr
 
 ### Model-level Fusion
 
+You can refer to [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for detailed instructions to start fine-tuning on model-level fusion data. Make sure to first clone the LLaMA-Factory repository into the FusionBench directory, and then execute the following commands to generate SFT data for model-level fusion:
 
-Run the following command to generate SFT data for model-level fusion.
 
 ```bash
 # setting: perf, judge, hybrid, baseline
@@ -122,8 +134,19 @@ python model_level/sft_data_gen.py --settin perf --k 5 --save_path [YOUR_PATH] -
 python model_level/sft_test_gen.py --save_path [YOUR_PATH] --csv_path [YOUR_PATH]
 ```
 
+Then, you can use the following commands to start SFT and Inference after essential configuration described in [LLaMA-Factory Doc](https://llamafactory.readthedocs.io/en/latest/)
 
-You can refer to [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for detailed instructions to start fine-tuning on model-level fusion data.
+```bash
+# SFT
+FORCE_TORCHRUN=1 CUDA_VISIBLE_DEVICES=2,3,4,5 llamafactory-cli train examples/train_lora/[YOUR_YAML].yaml
+
+# Inference
+CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/vllm_infer.py --model_name_or_path meta-llama/Llama-3.1-8B-Instruct --adapter_name_or_path saves/llama3.1-8b/lora/[YOUR_PATH] --dataset router_test --cutoff_len 2048
+```
+
+
+<!-- ### Evaluation -->
+
 
 
 
