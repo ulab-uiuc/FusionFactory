@@ -5,8 +5,8 @@ import random
 import json
 import pickle
 import argparse
-import yaml
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
 from datasets import load_dataset
@@ -39,11 +39,11 @@ def parallel_task_1(data):
 
 def parallel_task_2(data):
     success = True
-    rid, a_t, config, llm_names, MyLLMEngine, query_t, query_think_t, ground_truth_t, metric_t, task_id_k, task_id_t = data
+    rid, a_t, api_dict, llm_names, MyLLMEngine, query_t, query_think_t, ground_truth_t, metric_t, task_id_k, task_id_t = data
     print("info:", task_id_t, llm_names[a_t])
     try:
-        response_t = MyLLMEngine.get_llm_response(query=query_t, llm_idx=a_t)
-        response_think_t = MyLLMEngine.get_llm_response(query=query_think_t, llm_idx=a_t)
+        response_t = MyLLMEngine.get_llm_response(query=query_t, llm_idx=a_t, api_base=api_dict["api_base"], api_key=api_dict["api_key"])
+        response_think_t = MyLLMEngine.get_llm_response(query=query_think_t, llm_idx=a_t, api_base=api_dict["api_base"], api_key=api_dict["api_key"])
         reward_t = MyLLMEngine.eval(prediction=response_t, ground_truth=ground_truth_t, metric=metric_t,
                                          task_id=task_id_k)
         reward_think_t = MyLLMEngine.eval(prediction=response_think_t, ground_truth=ground_truth_t, metric=metric_t,
@@ -92,7 +92,7 @@ def async_save(data_snapshot, base_filename):
 
 
 class data_building:
-    def __init__(self, qa_path, llm_path, round, config):
+    def __init__(self, qa_path, llm_path, csv_save_path, round, api_dict):
         self.qa_data = qa_path
         self.llm_description = loadjson(llm_path)
         self.llm_names = list(self.llm_description.keys())
@@ -100,8 +100,9 @@ class data_building:
         for inter in self.llm_names:
             self.all_llm_description.append(self.llm_description[inter]['feature'])
         self.MyLLMEngine = LLMEngine(llm_names=self.llm_names, llm_description=self.llm_description)
-        self.config = config
+        self.csv_save_path = csv_save_path
         self.round = round
+        self.api_dict = api_dict
         self.construct_data_with_LLM()
         self.final_gathering()
 
@@ -140,11 +141,11 @@ class data_building:
                     ret_2_tmp = pickle.load(f)
                 print(f"Loaded existing results: {len(ret_2_tmp)}")
                 ret_2_tmp.sort(key=lambda x: (x[0], x[1]), reverse=False)
-                task_2_args = [(rid, a_t, self.config, self.llm_names, self.MyLLMEngine, row['query'], row['query_think'], row['gt'], row['metric'], row['task_id'] if 'task_id' in row else None, row['task_name']) for rid, row in enumerate(self.qa_data) for a_t in range(len(self.llm_names)) if not ret_2_tmp[rid * len(self.llm_names) + a_t][-1]]
+                task_2_args = [(rid, a_t, self.api_dict, self.llm_names, self.MyLLMEngine, row['query'], row['query_think'], row['gt'], row['metric'], row['task_id'] if 'task_id' in row else None, row['task_name']) for rid, row in enumerate(self.qa_data) for a_t in range(len(self.llm_names)) if not ret_2_tmp[rid * len(self.llm_names) + a_t][-1]]
                 ret_2 = [i for i in ret_2_tmp if i[-1]]
             else:
                 ret_2 = []
-                task_2_args = [(rid, a_t, self.config, self.llm_names, self.MyLLMEngine, row['query'], row['query_think'], row['gt'], row['metric'], row['task_id'] if 'task_id' in row else None, row['task_name']) for rid, row in enumerate(self.qa_data) for a_t in range(len(self.llm_names))]
+                task_2_args = [(rid, a_t, self.api_dict, self.llm_names, self.MyLLMEngine, row['query'], row['query_think'], row['gt'], row['metric'], row['task_id'] if 'task_id' in row else None, row['task_name']) for rid, row in enumerate(self.qa_data) for a_t in range(len(self.llm_names))]
 
             print("Task 2 Start")
             with ThreadPool(p_num) as p:
@@ -198,7 +199,7 @@ class data_building:
             ])
 
         # Create the CSV file with headers
-        df.to_csv(self.config['saved_router_data_path'], index=False)
+        df.to_csv(self.csv_save_path, index=False)
 
         # Process each row
         for rid, row in enumerate(tqdm(self.qa_data, total=len(self.qa_data), desc="Processing", ncols=100)):
@@ -254,7 +255,7 @@ class data_building:
                 temp_df = pd.DataFrame([new_row, new_row_think])
 
                 # Write immediately to CSV in append mode (mode='a') without writing the header again (header=False)
-                temp_df.to_csv(self.config['saved_router_data_path'], mode='a', header=False, index=False, quoting=csv.QUOTE_MINIMAL, escapechar='\\')
+                temp_df.to_csv(self.csv_save_path, mode='a', header=False, index=False, quoting=csv.QUOTE_MINIMAL, escapechar='\\')
 
 
 def get_n_samples(N=10, random_seed=42, split="train"):
@@ -265,7 +266,6 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     natural_qa_samples = []
     trivia_qa_samples = []
     squad_samples = []
-    quac_samples = []
     boolq_samples = []
     mmlu_samples = []
     gpqa_samples = []
@@ -278,10 +278,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     arc_challenge_samples = []
     hellaswag_samples = []
 
-    # 1. Natural QA dataset
+    # Natural QA dataset
     try:
-        natural_qa = load_dataset('RUC-NLPIR/FlashRAG_datasets', 'nq',
-                                  cache_dir='/data/taofeng2/Router_bench/dataset/World Knowledge')
+        natural_qa = load_dataset('RUC-NLPIR/FlashRAG_datasets', 'nq')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in natural_qa else list(natural_qa.keys())[0]
@@ -293,10 +292,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from Natural QA: {e}")
 
-    # 2. Trivia QA dataset
+    # Trivia QA dataset
     try:
-        trivia_qa = load_dataset("trivia_qa", "rc.nocontext",
-                                 cache_dir='/data/taofeng2/Router_bench/dataset/World Knowledge')
+        trivia_qa = load_dataset("trivia_qa", "rc.nocontext")
         if split == "train":
             split_name = 'train' if 'train' in trivia_qa else list(trivia_qa.keys())[0]
         else:
@@ -307,46 +305,23 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from Trivia QA: {e}")
 
-    # 3. SQUAD dataset
-    if split == "train":
-        try:
-            SQUAD = pd.read_parquet("/data/taofeng2/Router_bench/dataset/Reading Comprehension/SQUAD.parquet")
-            # Convert to list of dicts for consistency
-            squad_list = SQUAD.to_dict('records')
-            indices = random.sample(range(len(squad_list)), min(N, len(squad_list)))
-            squad_samples = [squad_list[i] for i in indices]
-            print(f"Successfully extracted {len(squad_samples)} samples from SQUAD")
-        except Exception as e:
-            print(f"Error extracting from SQUAD: {e}")
-    else:
-        try:
-            squad = load_dataset('RUC-NLPIR/FlashRAG_datasets', 'squad',
-                                 cache_dir='/data/taofeng2/Router_bench/dataset/World Knowledge')
-            # Get N random samples from the training split (or another split if available)
-            split_name = 'dev' if 'dev' in squad else list(squad.keys())[0]
-            indices = random.sample(range(len(squad[split_name])), min(N, len(squad[split_name])))
-            squad_samples = [squad[split_name][i] for i in indices]
-            print(f"Successfully extracted {len(squad_samples)} samples from SQUAD")
-        except Exception as e:
-            print(f"Error extracting from SQUAD: {e}")
-
-    # 4. QuAC dataset
+    # SQUAD dataset
     try:
-        quac = load_dataset("quac", trust_remote_code=True,
-                            cache_dir='/data/taofeng2/Router_bench/dataset/Reading Comprehension')
+        squad = load_dataset('rajpurkar/squad')
+        # Get N random samples from the training split (or another split if available)
         if split == "train":
-            split_name = 'train' if 'train' in quac else list(quac.keys())[0]
+            split_name = 'train' if 'train' in squad else list(squad.keys())[0]
         else:
-            split_name = 'test' if 'test' in quac else list(quac.keys())[0]
-        indices = random.sample(range(len(quac[split_name])), N)
-        quac_samples = [quac[split_name][i] for i in indices]
-        print(f"Successfully extracted {len(quac_samples)} samples from QuAC")
+            split_name = 'validation' if 'validation' in squad else list(squad.keys())[0]
+        indices = random.sample(range(len(squad[split_name])), min(N, len(squad[split_name])))
+        squad_samples = [squad[split_name][i] for i in indices]
+        print(f"Successfully extracted {len(squad_samples)} samples from SQUAD")
     except Exception as e:
-        print(f"Error extracting from QuAC: {e}")
+        print(f"Error extracting from SQUAD: {e}")
 
-    # 5. BoolQ dataset
+    # BoolQ dataset
     try:
-        boolq = load_dataset("boolq", cache_dir='/data/taofeng2/Router_bench/dataset/Reading Comprehension')
+        boolq = load_dataset("boolq")
         if split == "train":
             split_name = 'train' if 'train' in boolq else list(boolq.keys())[0]
         else:
@@ -357,9 +332,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from BoolQ: {e}")
 
-    # 6. MMLU dataset
+    # MMLU dataset
     try:
-        mmlu = load_dataset("cais/mmlu", "all", cache_dir='/data/taofeng2/Router_bench/dataset/Popular')
+        mmlu = load_dataset("cais/mmlu", "all")
         if split == "train":
             split_name = 'auxiliary_train' if 'auxiliary_train' in mmlu else list(mmlu.keys())[0]
         else:
@@ -370,10 +345,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from MMLU: {e}")
 
-    # 7. GPQA dataset
+    # GPQA dataset
     try:
-        gpqa = load_dataset("Idavidrein/gpqa", "gpqa_main",
-                            cache_dir='/data/taofeng2/Router_bench/dataset/Popular/gpqa')
+        gpqa = load_dataset("Idavidrein/gpqa", "gpqa_main")
         split_name = 'train' if 'train' in gpqa else list(gpqa.keys())[0]
         if split == "train":
             indices = random.sample(range(len(gpqa[split_name])), min(N, len(gpqa[split_name])))[:404]
@@ -384,38 +358,42 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from GPQA: {e}")
 
-    # 8. MBPP dataset
+    # MBPP dataset
     try:
-        mdpp_path = '/data/taofeng2/Router_bench/dataset/Code/mbpp.jsonl'
+        mdpp_path = './dataset/mbpp.jsonl'
         with open(mdpp_path, 'r') as f:
             lines = f.readlines()
 
         mbpp_samples_all = [json.loads(line) for line in lines]
-        indices = random.sample(range(len(mbpp_samples_all)), min(N, len(mbpp_samples_all)))
+        if split == "train":
+            indices = list(range(600, 974))
+        else:
+            indices = list(range(10, 510))
         mbpp_samples = [mbpp_samples_all[i] for i in indices]
 
         print(f"Successfully extracted {len(mbpp_samples)} samples from MDPP")
     except Exception as e:
         print(f"Error extracting from MDPP: {e}")
 
-    # 9. HumanEval dataset
+    # HumanEval dataset
     try:
-        humaneval_path = '/data/taofeng2/Router_bench/dataset/Code/HumanEval.jsonl'
+        humaneval_path = './dataset/HumanEval.jsonl'
         with open(humaneval_path, 'r') as f:
             lines = f.readlines()
 
         humaneval_samples_all = [json.loads(line) for line in lines]
-        indices = random.sample(range(len(humaneval_samples_all)), min(N, len(humaneval_samples_all)))
+        if split == "train":
+            indices = list(range(len(humaneval_samples_all)))[:114]
+        else:
+            indices = list(range(len(humaneval_samples_all)))[114:]
         humaneval_samples = [humaneval_samples_all[i] for i in indices]
-
         print(f"Successfully extracted {len(humaneval_samples)} samples from HumanEval")
     except Exception as e:
         print(f"Error extracting from HumanEval: {e}")
 
-    # 10. GSM8K dataset
+    # GSM8K dataset
     try:
-        gsm8k = load_dataset('gsm8k', 'main',
-                             cache_dir='/data/taofeng2/Router_bench/dataset/Math')
+        gsm8k = load_dataset('gsm8k', 'main')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in gsm8k else list(gsm8k.keys())[0]
@@ -427,10 +405,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from GSM8K: {e}")
 
-    # 11. CommonsenseQA dataset
+    # CommonsenseQA dataset
     try:
-        commonsense_qa = load_dataset('commonsense_qa',
-                                      cache_dir='/data/taofeng2/Router_bench/dataset/Commonsense Reasoning')
+        commonsense_qa = load_dataset('commonsense_qa')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in commonsense_qa else list(commonsense_qa.keys())[0]
@@ -442,10 +419,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from CommonsenseQA: {e}")
 
-    # 12. Hellaswag dataset
+    # Hellaswag dataset
     try:
-        hellaswag = load_dataset('Rowan/hellaswag',
-                                 cache_dir='/data/taofeng2/Router_bench/dataset/Commonsense Reasoning')
+        hellaswag = load_dataset('Rowan/hellaswag')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in hellaswag else list(hellaswag.keys())[0]
@@ -457,10 +433,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from Hellaswag: {e}")
 
-    # 13. ARC-Challenge dataset
+    # ARC-Challenge dataset
     try:
-        arc_challenge = load_dataset('allenai/ai2_arc', 'ARC-Challenge',
-                                     cache_dir='/data/taofeng2/Router_bench/dataset/Commonsense Reasoning')
+        arc_challenge = load_dataset('allenai/ai2_arc', 'ARC-Challenge')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in arc_challenge else list(arc_challenge.keys())[0]
@@ -472,10 +447,9 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from ARC-Challenge: {e}")
 
-    # 14. OpenbookQA dataset
+    # OpenbookQA dataset
     try:
-        openbook_qa = load_dataset('allenai/openbookqa', 'main',
-                                   cache_dir='/data/taofeng2/Router_bench/dataset/Commonsense Reasoning')
+        openbook_qa = load_dataset('allenai/openbookqa', 'main')
         # Get N random samples from the training split (or another split if available)
         if split == "train":
             split_name = 'train' if 'train' in openbook_qa else list(openbook_qa.keys())[0]
@@ -487,13 +461,12 @@ def get_n_samples(N=10, random_seed=42, split="train"):
     except Exception as e:
         print(f"Error extracting from OpenbookQA: {e}")
 
-    # 15. MATH dataset
+    # MATH dataset
     try:
         CATEGORY = ['algebra', 'counting_and_probability', 'geometry', 'intermediate_algebra', 'number_theory',
                     'prealgebra', 'precalculus']
         for cate in CATEGORY:
-            math = load_dataset('EleutherAI/hendrycks_math', cate,
-                                cache_dir='/data/taofeng2/Router_bench/dataset/Math')
+            math = load_dataset('EleutherAI/hendrycks_math', cate)
             # Get N random samples from the training split (or another split if available)
             if split == "train":
                 split_name = 'train' if 'train' in math else list(math.keys())[0]
@@ -509,7 +482,6 @@ def get_n_samples(N=10, random_seed=42, split="train"):
         "natural_qa": natural_qa_samples,
         "trivia_qa": trivia_qa_samples,
         "squad": squad_samples,
-        "quac": quac_samples,
         "boolq": boolq_samples,
         "mmlu": mmlu_samples,
         'gpqa': gpqa_samples,
@@ -531,8 +503,6 @@ task_description[
     "trivia_qa"] = 'TriviaQA features complex trivia-style questions with evidence from multiple web sources. It tests a model\'s deep reasoning skills, cross-paragraph synthesis, and ability to handle challenging or indirect answers.'
 task_description[
     "squad"] = 'SQuAD provides questions based on short Wikipedia passages where the answer is explicitly found in the text. It measures sentence-level comprehension and the model\'s precision in extracting factual information from concise contexts.'
-task_description[
-    "quac"] = 'QuAC is a conversational QA dataset where each question builds on the previous dialogue turn. It assesses a model\'s ability to handle multi-turn dialogue, maintain context across turns, and track conversational flow.'
 task_description[
     "boolq"] = 'BoolQ contains yes/no questions based on a given paragraph, written in natural language. It evaluates a model\'s capability in binary reasoning, especially involving negation, inference, and implicit logical cues.'
 task_description[
@@ -563,7 +533,11 @@ if __name__ == '__main__':
     parser.add_argument('--case_num', type=int, default=50)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--round', type=int, default=5)
-    parser.add_argument('--cache_save_path', type=str, default="/data/taofeng2/Router_bench/router_data/cache")
+    parser.add_argument('--llm_description_path', type=str, default="./data_process/LLM_Descriptions.json")
+    parser.add_argument('--cache_save_path', type=str, default="./dataset/cache")
+    parser.add_argument('--csv_save_path', type=str, default="./dataset/router_data.csv")
+    parser.add_argument('--api_base', type=str, default="[YOUR_API_BASE]")
+    parser.add_argument('--api_key', type=str, default="[YOUR_API_KEY]")
     args = parser.parse_args()
 
     SPLIT = args.split
@@ -572,6 +546,11 @@ if __name__ == '__main__':
     random.seed(SEED)
     CACHE_SAVE_PATH = args.cache_save_path
     ROUND = args.round
+    LLM_DESCRIPTION_PATH = args.llm_description_path
+    CSV_SAVE_PATH = args.csv_save_path
+    API_DICT = {"api_base": args.api_base, "api_key": args.api_key}
+
+    Path(args.local_dir).mkdir(parents=True, exist_ok=True)
 
     data_all = []
     samples = get_n_samples(N=CASE_NUM, random_seed=SEED, split=SPLIT)
@@ -597,17 +576,6 @@ if __name__ == '__main__':
                     'query_think'] = inter_['question'] + "\nLet's think step by step."
                 case['gt'] = inter_['answer']['normalized_aliases'][0]
                 case['metric'] = 'cem'
-                data_all.append(case)
-        elif inter == "quac":
-            for inter_ in samples[inter]:
-                context = inter_['context']
-                case = {}
-                case['task_name'] = inter
-                case['task_description'] = task_description[inter]
-                case['query'] = format_quac_prompt(inter_, 0)
-                case['query_think'] = format_quac_prompt(inter_, 0, thought=True)
-                case['gt'] = inter_['answers']['texts'][0][0]
-                case["metric"] = "f1_score"
                 data_all.append(case)
         elif inter == "squad":
             for inter_ in samples[inter]:
@@ -770,6 +738,4 @@ if __name__ == '__main__':
         else:
             raise Exception("Error")
 
-    with open("/data/taofeng2/Router_bench/configs/config_test.yaml", 'r', encoding='utf-8') as file:
-        config = yaml.safe_load(file)
-    data_building(qa_path=data_all,llm_path=config['llm_description_path'],config=config, round=ROUND)
+    data_building(qa_path=data_all, llm_path=LLM_DESCRIPTION_PATH, csv_save_path=CSV_SAVE_PATH, round=ROUND, api_dict=API_DICT)

@@ -120,8 +120,8 @@ if __name__ == '__main__':
     parser.add_argument('--setting', type=str, default="perf", choices=["perf", "judge", "hybrid", "baseline"])
     parser.add_argument('--small', action='store_true')
     parser.add_argument('--k', type=int, default=5)
-    parser.add_argument('--save_path', type=str, default="/data/taofeng2/Router_bench/data_process/LLaMA-Factory/data")
-    parser.add_argument('--csv_path_with_judge', type=str, default="/data/taofeng2/Router_bench/router_data/router_zijie_train_0603_with_judge.csv")
+    parser.add_argument('--save_path', type=str, default="./LLaMA-Factory/data")
+    parser.add_argument('--csv_path_with_judge', type=str, default="./dataset/router_data_with_judge.csv")
     args = parser.parse_args()
 
     TOP_K = args.k

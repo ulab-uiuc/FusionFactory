@@ -3,15 +3,12 @@ import re
 import string
 import pickle
 from collections import Counter
-from typing import List, Optional, Tuple,Optional, Union
+from typing import List, Tuple,Optional, Union
 
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from bert_score import score
-import litellm
 
 # Initialize the sentence transformer model
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -199,26 +196,6 @@ def hellaswag_preprocess(text):
     return text
 
 
-def get_bert_score(generate_response: List[str], ground_truth: List[str]) -> float:
-    """
-    Calculate BERT score between generated responses and ground truths.
-
-    Args:
-        generate_response: List of generated responses
-        ground_truth: List of ground truth texts
-
-    Returns:
-        Average BERT score (F1)
-    """
-    F_l = []
-    for inter in range(len(generate_response)):
-        generation = generate_response[inter]
-        gt = ground_truth[inter]
-        P, R, F = score([generation], [gt], lang="en", verbose=True)
-        F_l.append(F.mean().numpy().reshape(1)[0])
-    return np.array(F_l).mean()
-
-
 # Embedding and dimensionality reduction
 def reduce_embedding_dim(embed: np.ndarray, dim: int = 50) -> np.ndarray:
     """
@@ -252,19 +229,16 @@ def get_longformer_representation(text):
     # We set the [CLS] token to have global attention so it can attend to the entire sequence
     inputs = tokenizer(text, return_tensors="pt", max_length=4096, truncation=True)
 
-    # 将输入移动到指定设备
     inputs = {k: v.to(device) for k, v in inputs.items()}
 
     # Create global attention mask - set the first token ([CLS]) to have global attention
     global_attention_mask = torch.zeros(
         inputs["input_ids"].shape,
         dtype=torch.long,
-        device=device  # 直接在创建时指定设备
+        device=device
     )
     # Set the CLS token to have global attention
     global_attention_mask[:, 0] = 1
-
-
 
     # Get model outputs
     with torch.no_grad():
@@ -287,7 +261,6 @@ def get_longformer_representation(text):
         "all_hidden_states": outputs.hidden_states if hasattr(outputs, "hidden_states") else None
     }
 
-    # 返回的是张量，保持在GPU上
     return representations["cls_representation"]
 
 
@@ -355,12 +328,26 @@ def evaluate_code(generated_code, test_cases, timeout=5):
 
 
 from openai import OpenAI
-client = OpenAI(
-    base_url="[YOUR_API_BASE]",
-    api_key="[YOUR_API_KEY]",
-    timeout=300,
-    max_retries=2
-)
+
+_cached_client = None
+
+
+def get_client(
+    base_url="",
+    api_key="",
+    max_retries=2,
+    timeout=300
+):
+    global _cached_client
+    if _cached_client is None:
+        _cached_client = OpenAI(
+            base_url=base_url,
+            api_key=api_key,
+            timeout=timeout,
+            max_retries=max_retries
+        )
+    return _cached_client
+
 
 def model_prompting(
     llm_model: str,
@@ -369,6 +356,8 @@ def model_prompting(
     temperature: Optional[float] = 0.2,
     top_p: Optional[float] = 0.7,
     stream: Optional[bool] = True,
+    base_url="",
+    api_key=""
 ) -> Union[str, None]:
     """
     Get a response from an LLM model using the OpenAI-compatible NVIDIA API.
@@ -385,6 +374,7 @@ def model_prompting(
     Returns:
         Generated text response (or None if streaming is enabled)
     """
+    client = get_client(base_url=base_url, api_key=api_key)
     completion = client.chat.completions.create(
         model=llm_model,
         messages=[{"role": "user", "content": prompt}],

@@ -2,8 +2,8 @@ import json
 import re
 import time
 from transformers import GPT2Tokenizer
-from utils import model_prompting, f1_score, exact_match_score, get_bert_score, evaluate_code, cem_score
-from beartype.typing import Any, Dict, List, Tuple, Optional
+from utils import model_prompting, f1_score, exact_match_score, cem_score
+from beartype.typing import Any, Dict, List
 from human_eval.evaluate_functional_correctness import entry_point_item
 from mbpp.mbpp_eval import entry_point_item_mbpp
 from math_eval import last_boxed_only_string, remove_boxed, is_equiv
@@ -65,7 +65,7 @@ class LLMEngine:
         cost = input_size * input_price + output_size * output_price
         return cost, input_price, output_price, input_size, output_size
 
-    def get_llm_response(self, query: str, llm_idx: int) -> str:
+    def get_llm_response(self, query: str, llm_idx: int, api_base: str, api_key: str) -> str:
         """
         Send a query to a language model and get its response.
 
@@ -83,11 +83,11 @@ class LLMEngine:
         model = self.llm_description[llm_name]["model"]
 
         try:
-            response = model_prompting(llm_model=model, prompt=query)
+            response = model_prompting(llm_model=model, prompt=query, base_url=api_base, api_key=api_key)
         except:
             # If the request fails, wait and retry once
             time.sleep(2)
-            response = model_prompting(llm_model=model, prompt=query)
+            response = model_prompting(llm_model=model, prompt=query, base_url=api_base, api_key=api_key)
 
         return response
 
@@ -118,13 +118,7 @@ class LLMEngine:
             result = cem_score(prediction, ground_truth)
             return float(result)
 
-        # BERT-based semantic similarity score
-        elif metric == 'bert_score':
-            result = get_bert_score([prediction], [ground_truth])
-            return result
-
         # GSM8K math problem evaluation
-        # Extracts the final answer from the format "<answer>" and checks against ground truth
         elif metric == 'GSM8K':
             ground_truth = ground_truth.split("####")[-1].replace(',', '').replace('$', '').replace('.', '').strip()
             answer = re.findall("(\\-?[0-9\\.\\,]+)", prediction)
@@ -176,7 +170,7 @@ class LLMEngine:
                     code = prediction.strip()
 
                 mbpp_sample = {"task_id": task_id, "completion": code}
-                pass_1 = entry_point_item_mbpp(mbpp_sample, '/data/taofeng2/Router_bench/dataset/Code/mbpp.jsonl')
+                pass_1 = entry_point_item_mbpp(mbpp_sample, './dataset/mbpp.jsonl')
                 return pass_1
 
             else:
@@ -197,11 +191,8 @@ class LLMEngine:
                 dict = {"task_id": task_id, "completion": code}
 
                 # Use the existing entry_point_item function for evaluation
-                pass_1 = entry_point_item(dict, '/data/taofeng2/Router_bench/dataset/Code/HumanEval.jsonl')
+                pass_1 = entry_point_item(dict, './dataset/HumanEval.jsonl')
                 return pass_1
-
-
-
         # Default case for unrecognized metrics
         else:
             return 0

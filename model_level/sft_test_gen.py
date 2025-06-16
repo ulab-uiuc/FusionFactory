@@ -24,12 +24,11 @@ def json_data_gen(sorted_samples):
     return json_data_list
 
 
-# NCCL_P2P_DISABLE=1 NCCL_IB_DISABLE=1 CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/vllm_infer.py --model_name_or_path meta-llama/Llama-3.1-8B-Instruct --adapter_name_or_path saves/llama3.1-8b/quac/quac_hybrid-sft-5 --dataset router_test --cutoff_len 4096
-# python train_rl.py --path /data/taofeng2/Router-R1/verl/trainer/main_ppo --alpha 1.0 --beta 0.5 --cuda 4,5,6,9
+# NCCL_P2P_DISABLE=1 NCCL_IB_DISABLE=1 CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/vllm_infer.py --model_name_or_path meta-llama/Llama-3.1-8B-Instruct --adapter_name_or_path saves/llama3.1-8b/lora/xxx --dataset router_test --cutoff_len 2048
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--save_path', type=str, default="/data/taofeng2/Router_bench/data_process/LLaMA-Factory/data")
-    parser.add_argument('--csv_path', type=str, default="")
+    parser.add_argument('--save_path', type=str, default="./LLaMA-Factory/data")
+    parser.add_argument('--csv_path', type=str, default="./dataset/router_data_test.csv")
     args = parser.parse_args()
 
     SAVE_PATH = args.save_path
