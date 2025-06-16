@@ -261,20 +261,14 @@ fusion performs the worst, with limited gains even under LLM Judge–based selec
           <div class=" has-text-centered">
             <img src="static/images/j3.png" alt="MY ALT TEXT"/>
           </div>
-          <p>
-  This figure illustrates the multi-level LLM capability fusion framework in FusionBench, which includes query-level, thought-level, and model-level integration strategies.
-</p>
-
 <p>
-  At the query level, a router selects the most suitable LLM for each task-query pair by considering performance, cost, and LLM judge scores.
+  <strong>At the query level</strong>, a router selects the most suitable LLM for each task-query pair by considering performance, cost, and LLM judge scores.
 </p>
-
 <p>
-  At the thought level, a summarizer generates reusable reasoning templates from the top-ranked responses. These templates are then used for few-shot prompting of new queries through similarity-based retrieval.
+  <strong>At the thought level</strong>, a summarizer generates reusable reasoning templates from the top-ranked responses. These templates are then used for few-shot prompting of new queries through similarity-based retrieval.
 </p>
-
 <p>
-  At the model level, a new LLM is fine-tuned using top-quality responses selected by performance or LLM judgment to enhance its overall capabilities. The table on the left provides example data points and evaluation results across different strategies.
+  <strong>At the model level</strong>, a new LLM is fine-tuned using top-quality responses selected by performance or LLM judgment to enhance its overall capabilities. The table on the left provides example data points and evaluation results across different strategies.
 </p>
 
 
