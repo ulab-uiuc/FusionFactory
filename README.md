@@ -145,6 +145,9 @@ CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/vllm_infer.py --model_name_or_path m
 ```
 
 
+You may refer to the specific README in the `model_level` directory for detailed instructions.
+
+
 <!-- ### Evaluation -->
 
 
