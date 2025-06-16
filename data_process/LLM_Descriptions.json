@@ -1,0 +1,122 @@
+{
+  "qwen2-7b-instruct": {
+    "feature": "Qwen2-7B-Instruct is a bilingual Chinese and English large language model designed for comprehensive language understanding, coding, mathematics, and reasoning tasks. The model is available on Together AI with competitive pricing of $0.20 per million input tokens and $0.20 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "qwen/qwen2-7b-instruct"
+  },
+  "qwen2.5-7b-instruct": {
+    "feature": "Qwen2.5-7B-Instruct represents an upgraded version of the Qwen model series, featuring significantly enhanced multilingual capabilities across diverse language tasks. This improved model is competitively priced at $0.30 per million input tokens and $0.30 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "qwen/qwen2.5-7b-instruct"
+  },
+  "gemma-7b": {
+    "feature": "Gemma-7B is Google's lightweight 7-billion parameter model specifically optimized for both text generation and code-related tasks. Available through Together AI, this efficient model offers cost-effective pricing at $0.20 per million input tokens and $0.20 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "google/gemma-7b"
+  },
+  "codegemma-7b": {
+    "feature": "CodeGemma-7B is a specialized variant of the Gemma model family that focuses exclusively on code generation and completion tasks. This programming-oriented model provides robust coding assistance capabilities at an affordable rate of $0.20 per million input tokens and $0.20 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "google/codegemma-7b"
+  },
+  "gemma-2-9b-it": {
+    "feature": "Gemma-2-9B-IT is a 2.9-billion parameter instruction-tuned model from Google, designed for general text processing and conversational applications. This compact yet capable model offers exceptional value with ultra-low pricing of $0.10 per million input tokens and $0.10 per million output tokens.",
+    "input_price": 0.10,
+    "output_price": 0.10,
+    "model": "google/gemma-2-9b-it"
+  },
+  "llama-3.1-8b-instruct": {
+    "feature": "Llama-3.1-8B-Instruct is Meta's 8-billion parameter model from the advanced Llama-3 series, specifically designed for conversational AI and complex reasoning tasks. This versatile model combines strong performance with reasonable costs at $0.20 per million input tokens and $0.20 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "granite-3.0-8b-instruct": {
+    "feature": "Granite-3.0-8B-Instruct is IBM's compact large language model that excels in retrieval-augmented generation (RAG), document summarization, and code-related tasks. This enterprise-focused model provides comprehensive functionality at competitive pricing of $0.20 per million input tokens and $0.20 per million output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "ibm/granite-3.0-8b-instruct"
+  },
+  "llama3-chatqa-1.5-8b": {
+    "feature": "Llama3-ChatQA-1.5-8B is an NVIDIA fine-tuned 8-billion parameter model specifically optimized for question-answering and reasoning applications. This specialized model delivers enhanced performance in conversational AI scenarios at $0.20 per million input and output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "nvidia/llama3-chatqa-1.5-8b"
+  },
+  "mistral-nemo-12b-instruct": {
+    "feature": "Mistral-Nemo-12B-Instruct is a 12-billion parameter model that combines innovative Mistral architecture with NeMo technology for enhanced performance. This hybrid approach delivers superior capabilities across various tasks, priced at $0.30 per million input tokens and $0.30 per million output tokens.",
+    "input_price": 0.30,
+    "output_price": 0.30,
+    "model": "nv-mistralai/mistral-nemo-12b-instruct"
+  },
+  "mistral-7b-instruct-v0.3": {
+    "feature": "Mistral-7B-Instruct-v0.3 is a fast and efficient 7-billion parameter model specifically designed for instruction-following tasks. This streamlined model provides quick response times and reliable performance at cost-effective pricing of $0.20 per million input and output tokens.",
+    "input_price": 0.20,
+    "output_price": 0.20,
+    "model": "mistralai/mistral-7b-instruct-v0.3"
+  },
+  "llama-3.3-nemotron-super-49b-v1": {
+    "feature": "Llama-3.3-Nemotron-Super-49B-v1 is a powerful 49-billion parameter Nemotron model engineered for high-accuracy performance across demanding applications. This advanced model delivers exceptional results for complex tasks, available at $0.90 per million input and output tokens.",
+    "input_price": 0.90,
+    "output_price": 0.90,
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "llama-3.1-nemotron-51b-instruct": {
+    "feature": "Llama-3.1-Nemotron-51B-Instruct is NVIDIA's 51-billion parameter alignment model that focuses on producing safe, helpful, and accurate responses. This enterprise-grade model emphasizes responsible AI deployment and is priced at $0.90 per million input and output tokens.",
+    "input_price": 0.90,
+    "output_price": 0.90,
+    "model": "nvidia/llama-3.1-nemotron-51b-instruct"
+  },
+  "llama3-chatqa-1.5-70b": {
+    "feature": "Llama3-ChatQA-1.5-70B is a 70-billion parameter model specifically optimized for conversational AI and chat applications. This large-scale model provides sophisticated dialogue capabilities and nuanced understanding, available at $0.90 per million input and output tokens.",
+    "input_price": 0.90,
+    "output_price": 0.90,
+    "model": "nvidia/llama3-chatqa-1.5-70b"
+  },
+  "llama-3.1-70b-instruct": {
+    "feature": "Llama-3.1-70B-Instruct is Meta's flagship 70-billion parameter model designed for handling complex conversations and sophisticated reasoning tasks. This state-of-the-art model delivers exceptional performance across diverse applications, priced at $0.90 per million input and output tokens.",
+    "input_price": 0.90,
+    "output_price": 0.90,
+    "model": "meta/llama3-70b-instruct"
+  },
+  "llama3-70b-instruct": {
+    "feature": "Llama3-70B-Instruct represents an alternative naming convention for Meta's powerful 70-billion parameter model, maintaining the same robust capabilities and performance characteristics. This model provides comprehensive language understanding and generation at $0.90 per million input and output tokens.",
+    "input_price": 0.90,
+    "output_price": 0.90,
+    "model": "meta/llama-3.1-8b-instruct"
+  },
+  "granite-34b-code-instruct": {
+    "feature": "Granite-34B-Code-Instruct is IBM's specialized 34-billion parameter model exclusively designed for software development and programming tasks. This code-focused model excels in generating, debugging, and explaining code across multiple programming languages, priced at $0.80 per million input and output tokens.",
+    "input_price": 0.80,
+    "output_price": 0.80,
+    "model": "ibm/granite-34b-code-instruct"
+  },
+  "mixtral-8x7b-instruct-v0.1": {
+    "feature": "Mixtral-8×7B-Instruct-v0.1 is a 56-billion parameter Mixture of Experts (MoE) model composed of eight 7-billion parameter expert models, specifically optimized for creative text generation. This innovative architecture provides high-quality outputs while maintaining efficiency, available at $0.60 per million input and output tokens.",
+    "input_price": 0.60,
+    "output_price": 0.60,
+    "model": "mistralai/mixtral-8x7b-instruct-v0.1"
+  },
+  "deepseek-r1": {
+    "feature": "DeepSeek-R1 is a massive 671-billion parameter reasoning powerhouse designed for complex analytical and problem-solving tasks. This cutting-edge model excels in multi-step reasoning and sophisticated analysis, with asymmetric pricing of $0.55 per million input tokens and $2.19 per million output tokens.",
+    "input_price": 0.55,
+    "output_price": 2.19,
+    "model": "deepseek-ai/deepseek-r1"
+  },
+  "mixtral-8x22b-instruct-v0.1": {
+    "feature": "Mixtral-8×22B-Instruct-v0.1 is an advanced 176-billion parameter Mixture of Experts model comprising eight 22-billion parameter expert components. This large-scale MoE architecture delivers exceptional performance across diverse tasks while maintaining computational efficiency, priced at $1.20 per million input and output tokens.",
+    "input_price": 1.20,
+    "output_price": 1.20,
+    "model": "mistralai/mixtral-8x22b-instruct-v0.1"
+  },
+  "palmyra-creative-122b": {
+    "feature": "Palmyra-Creative-122B is Writer's specialized 122-billion parameter model specifically engineered for creative writing and marketing content generation. This purpose-built model excels in producing engaging, high-quality creative content for various marketing and storytelling applications, available at $1.80 per million input and output tokens.",
+    "input_price": 1.80,
+    "output_price": 1.80,
+    "model": "writer/palmyra-creative-122b"
+  }
+}
