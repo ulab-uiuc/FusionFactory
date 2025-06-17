@@ -1,7 +1,7 @@
 # Fusing LLM Capabilities with Routing Data
 
 <p align="center">
-    <a href="https://ulab-uiuc.github.io/FusionBench/">
+    <a href="https://ulab-uiuc.github.io/FusionFactory/">
         <img alt="Build" src="https://img.shields.io/badge/Project-Page-blue">
     </a>
     <a href="http://arxiv.org/abs/xxxx.xxxxx">
@@ -10,27 +10,27 @@
     <!-- <a href="xxx">
         <img alt="Build" src="https://img.shields.io/badge/Twitter-black?logo=X">
     </a> -->
-    <a href="https://github.com/ulab-uiuc/FusionBench/blob/master/LICENSE">
+    <a href="https://github.com/ulab-uiuc/FusionFactory/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-green">
     </a>
     <br>
-    <a href="https://github.com/ulab-uiuc/FusionBench">
-        <img alt="Build" src="https://img.shields.io/github/stars/ulab-uiuc/FusionBench">
+    <a href="https://github.com/ulab-uiuc/FusionFactory">
+        <img alt="Build" src="https://img.shields.io/github/stars/ulab-uiuc/FusionFactory">
     </a>
-    <a href="https://github.com/ulab-uiuc/FusionBench">
-        <img alt="Build" src="https://img.shields.io/github/forks/ulab-uiuc/FusionBench">
+    <a href="https://github.com/ulab-uiuc/FusionFactory">
+        <img alt="Build" src="https://img.shields.io/github/forks/ulab-uiuc/FusionFactory">
     </a>
-    <a href="https://github.com/ulab-uiuc/FusionBench">
-        <img alt="Build" src="https://img.shields.io/github/issues/ulab-uiuc/FusionBench">
+    <a href="https://github.com/ulab-uiuc/FusionFactory">
+        <img alt="Build" src="https://img.shields.io/github/issues/ulab-uiuc/FusionFactory">
     </a>
 </p>
 
 
 <p align="center">
-    <a href="https://ulab-uiuc.github.io/FusionBench/">🌐 Project Page</a> |
+    <a href="https://ulab-uiuc.github.io/FusionFactory/">🌐 Project Page</a> |
     <a href="http://arxiv.org/abs/2410.03834">📜 arXiv</a> |
     <a href="https://huggingface.co/datasets/ulab-ai/FusionBench">📂 Dataset</a>
-    <a href="https://huggingface.co/ulab-ai/FusionBench-model">🤖 Model</a>
+    <a href="https://huggingface.co/ulab-ai/FusionFactory">🤖 Model</a>
 
 <p>
 
@@ -38,20 +38,20 @@
 
 <div align="center">
   <img src="./figures/fusion.jpg" width="700" alt="FusionBench">
-  <p><b>Overview of LLM capability fusion via FusionBence with three representative levels: Query-level, Thought-level, and Model-level.</b></p>
+  <p><b>Overview of LLM capability fusion via FusionFactory with three representative levels: Query-level, Thought-level, and Model-level.</b></p>
 </div>
 
 
 ## News
 
-**[2025.06]** 🌟 **FusionBench** was released.
+**[2025.06]** 🌟 **FusionFactory** was released.
 
 
 
 ## 🛠️Environment Setup
 
 ```bash
-conda create -n fusionbench python=3.9
+conda create -n fusionfactory python=3.9
 conda activate fusionbench
 pip install pandas
 pip install datasets
