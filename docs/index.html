@@ -156,29 +156,35 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Large language models (LLMs) demonstrate varying strengths across different tasks
-due to differences in architecture, training data, and optimization objectives. While
-individual LLMs excel in specific areas, they often face limitations in capability
-coverage and token cost inefficiencies when handling complex tasks. The routing
-data contains information about the capabilities of various LLMs across tasks,
-making it well-suited for LLM capability fusion. A pressing research question is
-that, given large-scale routing data, how can we effectively fuse different LLM
-capabilities? To tackle this question, we propose FusionBench, a comprehensive
-routing benchmark that includes diverse response types from multiple LLMs, sum-
-marizes reusable thought templates from top models, and covers 14 tasks across five
-domains using 20 open-source LLMs ranging from 8B to 671B parameters. Based
-on FusionBench, we investigate LLM capability fusion at three representative
-levels: (1) Query-level fusion, which constructs tailored LLM routers for each
-query while considering both direct response patterns and reasoning-augmented
-outputs; (2) Thought-level fusion, which enhances response quality by leveraging
-abstract thought templates derived from top-performing LLMs’ answers to similar
-past queries; and (3) Model-level fusion, which transfers capabilities between
-models through distillation methods, selecting top-performing responses or those
-with highest judge scores as training data. We evaluated all three fusion levels on 14
-tasks in FusionBench and found that: query-level fusion achieves a strong trade-
-off between performance and efficiency; thought-level fusion yields the best overall
-results, particularly with hybrid selection and larger summarizers; and model-level
-fusion performs the worst, with limited gains even under LLM Judge–based selection. 
+            The rapid advancement of large language models (LLMs) has fostered a vibrant
+ecosystem of diverse architectures, each exhibiting unique strengths across different
+tasks due to variations in model design, training data, and optimization objectives.
+Despite this diversity, most LLM applications rely on a single backend model,
+limiting their ability to cover a wide range of capabilities and often resulting in
+inefficiencies in both performance and token costs when tackling complex tasks.
+We point out that modern LLM hosting platforms typically serve a variety of
+models in response to diverse queries, generating a rich and underutilized resource:
+LLM routing data, which offers insights into the comparative strengths of differ-
+ent models across tasks. We identify a critical gap in current LLM ecosystems,
+the underexploitation of large-scale LLM routing data, which holds significant
+potential for optimizing multi-LLM integration and effectively harnessing their
+complementary capabilities. To tackle this question, we propose FusionBench,
+a comprehensive routing benchmark that includes diverse response types from
+multiple LLMs, summarizes reusable thought templates from top models, and
+covers 14 tasks across five domains using 20 open-source LLMs ranging from
+8B to 671B parameters, consisting of 103M tokens. Based on FusionBench, we
+propose FusionFactory, a systematic LLM fusion framework with three repre-
+sentative levels: (1) query-level fusion, which constructs tailored LLM routers
+for each query while considering both direct response patterns and reasoning-
+augmented outputs; (2) thought-level fusion, which enhances response quality
+by leveraging abstract thought templates derived from top-performing LLMs’
+answers to similar past queries; and (3) model-level fusion, which transfers ca-
+pabilities between models through distillation methods, selecting top-performing
+responses or those with highest judge scores as training data. We systemati-
+cally evaluate FusionFactory on FusionBench and find that fusing LLMs with
+FusionFactory yields consistent benchmark performance improvement over the
+best individual LLM across 14 popular LLM benchmarks, where the optimal
+FusionFactory configuration varies across different benchmarks.
           </p>
         </div>
 
