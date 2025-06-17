@@ -84,8 +84,13 @@ python data_process/data_combine.py \
 
 You may refer to the specific README in the `data_process` directory for detailed argument descriptions.
 
+To add quality scores to the collected data using an LLM judge:
 
-<!-- Run the following command to start data collection, which will resume the collection of LLM judge data. -->
+```bash
+python data_process/add_llm_judge.py
+```
+
+This will evaluate each response and add quality scores to the dataset, which can be used for training and evaluation purposes. See the `data_process/README.md` for more details.
 
 
 
