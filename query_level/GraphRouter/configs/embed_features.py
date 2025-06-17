@@ -3,10 +3,7 @@ import pickle
 import torch
 from transformers import AutoTokenizer, AutoModel
 import numpy as np
-
-
 from transformers import LongformerTokenizer, LongformerModel
-import torch
 
 def get_cls_embedding(text, model_name="allenai/longformer-base-4096", device="cuda:0"):
     """
@@ -36,7 +33,7 @@ def get_cls_embedding(text, model_name="allenai/longformer-base-4096", device="c
 
 def main():
     # Load the JSON file
-    with open('/data/taofeng2/Router_bench/zijie/GraphRouter/configs/large_LLM_Description_with_think.json', 'r') as f:
+    with open('large_LLM_Description_with_think.json', 'r') as f:
         llm_descriptions = json.load(f)
     
     # Initialize BERT model and tokenizer
@@ -56,7 +53,7 @@ def main():
     embedding_matrix = np.array([embeddings[name] for name in model_names])
     
     # Save embeddings as numpy array
-    with open('/data/taofeng2/Router_bench/zijie/GraphRouter/configs/large_llm_description_embedding_with_think.pkl', 'wb') as f:
+    with open('large_llm_description_embedding_with_think.pkl', 'wb') as f:
         pickle.dump(embedding_matrix, f)
     
     print(f"Generated embeddings of shape: {embedding_matrix.shape}")

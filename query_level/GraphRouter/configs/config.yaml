@@ -2,14 +2,9 @@
 api_key: ""
 unified_qa_data_path: 'data/unified_qa_data.csv'
 llm_description_path: 'configs/new_LLM_Descriptions_with_think.json'
-# llm_description_path: 'configs/LLM_Descriptions.json'
 llm_embedding_path: 'configs/new_llm_description_embedding_with_think.pkl'
-# llm_embedding_path: 'configs/llm_description_embedding.pkl'
-# saved_router_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_train.csv'
-# saved_router_data_path: 'data/router_data.csv'
-train_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_train_0603_with_judge.csv'
-# test_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_test.csv'
-test_data_path: '/data/taofeng2/Router_bench/router_data/router_zijie_test_0603_with_judge.csv'
+train_data_path: ''
+test_data_path: ''
 query_response_length: 512
 
 
