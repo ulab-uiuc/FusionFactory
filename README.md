@@ -52,7 +52,7 @@
 
 ```bash
 conda create -n fusionfactory python=3.9
-conda activate fusionbench
+conda activate fusionfactory
 pip install pandas
 pip install datasets
 pip install tqdm
