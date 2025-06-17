@@ -162,7 +162,7 @@ You may refer to the specific README in the `model_level` directory for detailed
 ## Citation
 
 ```bibtex
-@article{FusionBench,
+@article{FusionFactory,
   title={Fusing LLM Capabilities with Routing Data},
   author={Tao Feng and Haozhen Zhang and Zijie Lei and Pengrui Han and Mostofa Patwary and Mohammad Shoeybi and Bryan Catanzaro and Jiaxuan You},
   journal={arXiv preprint arXiv:xxxx.xxxxx},
