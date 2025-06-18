@@ -82,7 +82,7 @@ python data_process/data_combine.py \
 --api_key [YOUR_API_KEY]
 ```
 
-You may refer to the specific README in the `data_process` directory for detailed argument descriptions.
+You may refer to the specific README in the [`data_process`](data_process/README.md) directory for detailed argument descriptions.
 
 To add quality scores to the collected data using an LLM judge:
 
@@ -90,7 +90,7 @@ To add quality scores to the collected data using an LLM judge:
 python data_process/add_llm_judge.py
 ```
 
-This will evaluate each response and add quality scores to the dataset, which can be used for training and evaluation purposes. See the `data_process/README.md` for more details.
+This will evaluate each response and add quality scores to the dataset, which can be used for training and evaluation purposes. See the [`data_process/README.md`](data_process/README.md) for more details.
 
 
 
@@ -107,7 +107,7 @@ First, run the data preprocessing script to prepare the dataset:
 python query_level/data_processing.py
 ```
 
-For more detailed information about the data preprocessing and model training process, please refer to the specific README in the `query_level` directory.
+For more detailed information about the data preprocessing and model training process, please refer to the specific README in the [`query_level`](query_level/README.md) directory.
 
 
 
@@ -125,7 +125,7 @@ Or run the script to directly use Huggingface datasets to generate thought-enhan
 python thought_level/get_thought_prompt.py
 ```
 
-For more detailed information about the data preprocessing and model training process, please refer to the specific README in the `thought_level` directory.
+For more detailed information about the data preprocessing and model training process, please refer to the specific README in the [`thought_level`](thought_level/README.md) directory.
 
 
 ### Model-level Fusion
@@ -151,12 +151,27 @@ CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/vllm_infer.py --model_name_or_path m
 ```
 
 
-You may refer to the specific README in the `model_level` directory for detailed instructions.
+You may refer to the specific README in the [`model_level`](model_level/README.md) directory for detailed instructions.
 
 
-<!-- ### Evaluation -->
+## 📈 Evaluation
 
+FusionBench provides a comprehensive evaluation framework to assess model performance across various tasks. The evaluation framework supports multiple types of tasks including:
 
+- Mathematical Reasoning (GSM8K, MATH)
+- Code Generation (MBPP, HumanEval)
+- Commonsense Reasoning (CommonsenseQA, OpenBookQA, ARC Challenge, HellaSwag)
+- World Knowledge (Natural Questions, TriviaQA)
+- Reading Comprehension (SQuAD, BoolQ)
+- Popular Benchmarks (MMLU, GPQA)
+
+To evaluate your model's performance:
+
+```bash
+python eval/response_eval.py
+```
+
+For detailed information about the evaluation framework, supported metrics, and usage instructions, please refer to the [Evaluation Documentation](eval/README.md).
 
 
 ## Citation

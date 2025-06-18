@@ -10,7 +10,7 @@ The evaluation framework supports multiple types of tasks and metrics:
 - **Code Generation**: MBPP, HumanEval
 - **Commonsense Reasoning**: CommonsenseQA, OpenBookQA, ARC Challenge, HellaSwag
 - **World Knowledge**: Natural Questions, TriviaQA
-- **Reading Comprehension**: SQuAD, QuAC, BoolQ
+- **Reading Comprehension**: SQuAD, BoolQ
 - **Popular Benchmarks**: MMLU, GPQA
 
 ## Key Components
