@@ -59,7 +59,7 @@ def eval_perf(metric, prediction, ground_truth, task_name, task_id=None):
         except Exception as e:
             return 0
         return 0
-    elif metric == 'f1_score' or task_name in ['quac']:
+    elif metric == 'f1_score':
         f1, prec, recall = f1_score(prediction, ground_truth)
         return f1
     elif metric == 'code_eval':
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     CODE_TASK = ["mbpp", "human_eval"]
     COMMONSENSE_TASK = ['commonsense_qa', 'openbook_qa', 'arc_challenge', 'hellaswag']
     WORLD_KNOWLEDGE_TASK = ["natural_qa", "trivia_qa"]
-    READING_TASK = ["squad", 'quac', "boolq"]
+    READING_TASK = ["squad", "boolq"]
     POPULAR_TASK = ["mmlu", "gpqa"]
 
     task_results = defaultdict(list)
