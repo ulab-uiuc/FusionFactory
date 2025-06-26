@@ -10,7 +10,7 @@ query_response_length: 512
 
 # Config parameters for graph_router training:
 seed: 1
-wandb_key: '84679e2187c9dff30d66ba819d630dc2f25a0237'
+wandb_key: ''
 model_path: 'model_path/all_performance_best_model.pth'
 train_epoch: 70
 scenario: "Performance First"  # "Performance First", "Balance", and "Cost First"
