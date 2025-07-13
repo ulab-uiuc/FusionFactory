@@ -2,40 +2,37 @@
 
 <p align="center">
     <a href="https://ulab-uiuc.github.io/FusionFactory/">
-        <img alt="Build" src="https://img.shields.io/badge/Project-Page-blue">
+        <img alt="Project Page" src="https://img.shields.io/badge/Project-Page-blue">
     </a>
     <a href="http://arxiv.org/abs/xxxx.xxxxx">
-        <img alt="Build" src="https://img.shields.io/badge/arXiv-xxxx.xxxxx-red?logo=arxiv">
+        <img alt="arXiv" src="https://img.shields.io/badge/arXiv-xxxx.xxxxx-red?logo=arxiv">
     </a>
     <!-- <a href="xxx">
-        <img alt="Build" src="https://img.shields.io/badge/Twitter-black?logo=X">
+        <img alt="Twitter" src="https://img.shields.io/badge/Twitter-black?logo=X">
     </a> -->
-    <a href="https://huggingface.co/spaces/ulab-ai/RoutePilot">
-    <img alt="HuggingFace Demo" src="https://img.shields.io/badge/Space-RoutePilot-orange?logo=huggingface">
-    </a>
     <a href="https://github.com/ulab-uiuc/FusionFactory/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-green">
     </a>
     <br>
     <a href="https://github.com/ulab-uiuc/FusionFactory">
-        <img alt="Build" src="https://img.shields.io/github/stars/ulab-uiuc/FusionFactory">
+        <img alt="Stars" src="https://img.shields.io/github/stars/ulab-uiuc/FusionFactory">
     </a>
     <a href="https://github.com/ulab-uiuc/FusionFactory">
-        <img alt="Build" src="https://img.shields.io/github/forks/ulab-uiuc/FusionFactory">
+        <img alt="Forks" src="https://img.shields.io/github/forks/ulab-uiuc/FusionFactory">
     </a>
     <a href="https://github.com/ulab-uiuc/FusionFactory">
-        <img alt="Build" src="https://img.shields.io/github/issues/ulab-uiuc/FusionFactory">
+        <img alt="Issues" src="https://img.shields.io/github/issues/ulab-uiuc/FusionFactory">
     </a>
 </p>
-
 
 <p align="center">
     <a href="https://ulab-uiuc.github.io/FusionFactory/">🌐 Project Page</a> |
     <a href="http://arxiv.org/abs/2410.03834">📜 arXiv</a> |
-    <a href="https://huggingface.co/datasets/ulab-ai/FusionBench">📂 Dataset</a>
-    <a href="https://huggingface.co/ulab-ai/FusionFactory">🤖 Model</a>
+    <a href="https://huggingface.co/datasets/ulab-ai/FusionBench">📂 Dataset</a> |
+    <a href="https://huggingface.co/ulab-ai/FusionFactory">🤖 Model</a> |
+    <a href="https://huggingface.co/spaces/ulab-ai/RoutePilot">🖥️ Demo</a>
+</p>
 
-<p>
 
 
 
