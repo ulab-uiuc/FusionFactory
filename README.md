@@ -11,7 +11,7 @@
         <img alt="Build" src="https://img.shields.io/badge/Twitter-black?logo=X">
     </a> -->
     <a href="https://huggingface.co/spaces/ulab-ai/RoutePilot">
-    <img alt="HuggingFace Space" src="https://img.shields.io/badge/Space-RoutePilot-orange?logo=huggingface">
+    <img alt="HuggingFace Demo" src="https://img.shields.io/badge/Space-RoutePilot-orange?logo=huggingface">
     </a>
     <a href="https://github.com/ulab-uiuc/FusionFactory/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-green">
