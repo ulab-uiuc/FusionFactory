@@ -4,8 +4,8 @@
     <a href="https://ulab-uiuc.github.io/FusionFactory/">
         <img alt="Project Page" src="https://img.shields.io/badge/Project-Page-blue">
     </a>
-    <a href="http://arxiv.org/abs/xxxx.xxxxx">
-        <img alt="arXiv" src="https://img.shields.io/badge/arXiv-xxxx.xxxxx-red?logo=arxiv">
+    <a href="http://arxiv.org/abs/2507.10540">
+        <img alt="arXiv" src="https://img.shields.io/badge/arXiv-2507.10540-red?logo=arxiv">
     </a>
     <!-- <a href="xxx">
         <img alt="Twitter" src="https://img.shields.io/badge/Twitter-black?logo=X">
