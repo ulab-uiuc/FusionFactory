@@ -27,7 +27,7 @@
 
 <p align="center">
     <a href="https://ulab-uiuc.github.io/FusionFactory/">🌐 Project Page</a> |
-    <a href="http://arxiv.org/abs/2410.03834">📜 arXiv</a> |
+    <a href="http://arxiv.org/abs/2507.10540">📜 arXiv</a> |
     <a href="https://huggingface.co/datasets/ulab-ai/FusionBench">📂 Dataset</a> |
     <a href="https://huggingface.co/ulab-ai/FusionFactory">🤖 Model</a> |
     <a href="https://huggingface.co/spaces/ulab-ai/RoutePilot">🖥️ Demo</a>
