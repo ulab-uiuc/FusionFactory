@@ -180,7 +180,7 @@ For detailed information about the evaluation framework, supported metrics, and 
 @article{FusionFactory,
   title={Fusing LLM Capabilities with Routing Data},
   author={Tao Feng and Haozhen Zhang and Zijie Lei and Pengrui Han and Mostofa Patwary and Mohammad Shoeybi and Bryan Catanzaro and Jiaxuan You},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
+  journal={arXiv preprint arXiv:2507.10540},
   year={2025}
 }
 ```
