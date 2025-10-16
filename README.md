@@ -1,4 +1,4 @@
-# Fusing LLM Capabilities with Routing Data
+# FusionFactory: Fusing LLM Capabilities with Multi-LLM Log Data
 
 <p align="center">
     <a href="https://ulab-uiuc.github.io/FusionFactory/">
@@ -177,9 +177,9 @@ For detailed information about the evaluation framework, supported metrics, and 
 ## Citation
 
 ```bibtex
-@article{FusionFactory,
+@article{feng2025fusing,
   title={Fusing LLM Capabilities with Routing Data},
-  author={Tao Feng and Haozhen Zhang and Zijie Lei and Pengrui Han and Mostofa Patwary and Mohammad Shoeybi and Bryan Catanzaro and Jiaxuan You},
+  author={Feng, Tao and Zhang, Haozhen and Lei, Zijie and Han, Pengrui and Patwary, Mostofa and Shoeybi, Mohammad and Catanzaro, Bryan and You, Jiaxuan},
   journal={arXiv preprint arXiv:2507.10540},
   year={2025}
 }
