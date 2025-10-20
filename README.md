@@ -177,8 +177,8 @@ For detailed information about the evaluation framework, supported metrics, and 
 ## Citation
 
 ```bibtex
-@article{feng2025fusing,
-  title={Fusing LLM Capabilities with Routing Data},
+@article{feng2025fusionfactory,
+  title={FusionFactory: Fusing LLM Capabilities with Multi-LLM Log Data},
   author={Feng, Tao and Zhang, Haozhen and Lei, Zijie and Han, Pengrui and Patwary, Mostofa and Shoeybi, Mohammad and Catanzaro, Bryan and You, Jiaxuan},
   journal={arXiv preprint arXiv:2507.10540},
   year={2025}
