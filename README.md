@@ -44,6 +44,8 @@
 
 ## News
 
+**[2025.12]** 🚀 We open-sourced **[LLMRouter](https://github.com/ulab-uiuc/LLMRouter)**, a unified and extensible framework for training and evaluating **single-round / multi-round / agentic / personalized LLM routers**. LLMRouter aims to reduce duplicated engineering effort and enable fair comparison across different routing methods. We warmly welcome the community to integrate and benchmark their own routers!
+
 **[2025.06]** 🌟 **FusionFactory** was released.
 
 
